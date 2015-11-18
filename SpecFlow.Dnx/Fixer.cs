@@ -45,7 +45,7 @@ namespace SpecFlow.Dnx
 			}
 		}
 
-		private void GenerateSpecFlowGlue(FileInfo fakeCsproj)
+		private string SaveSpecFlowConfig()
 		{
 			// Target later version of .NET.
 			// Credit: http://stackoverflow.com/questions/11363202/specflow-fails-when-trying-to-generate-test-execution-report
@@ -54,8 +54,13 @@ namespace SpecFlow.Dnx
 			File.WriteAllText(configPath, configFileContents);
 			Console.WriteLine("Created SpecFlow config file.");
 
+			return configPath;
+		}
+
+		private void RunSpecFlow(string csproj)
+		{
 			// Credit: http://www.marcusoft.net/2010/12/specflowexe-and-mstest.html
-			var command = $"{_specFlowExe} generateall {fakeCsproj.Name} /force /verbose";
+			var command = $"{_specFlowExe} generateall {csproj} /force /verbose";
 			Console.WriteLine("Calling: " + command);
 
 			var p = new Process
@@ -65,7 +70,7 @@ namespace SpecFlow.Dnx
 					UseShellExecute = false,
 					RedirectStandardOutput = true,
 					FileName = _specFlowExe,
-					Arguments = $"generateall {fakeCsproj.Name} /force /verbose"
+					Arguments = $"generateall {csproj} /force /verbose"
 				}
 			};
 
@@ -76,11 +81,21 @@ namespace SpecFlow.Dnx
 
 			Console.WriteLine(output);
 
-			Console.WriteLine("Removing the SpecFlow config file.");
-			File.Delete(configPath);
-
 			if (output.Contains("-> test generation failed"))
 				throw new Exception("SpecFlow generation failed (review the output).");
+		}
+
+		private void DeleteSpecFlowConfig(string configPath)
+		{
+			Console.WriteLine("Removing the SpecFlow config file.");
+			File.Delete(configPath);
+		}
+
+		private void GenerateSpecFlowGlue(FileInfo fakeCsproj)
+		{
+			var configPath = SaveSpecFlowConfig();
+			RunSpecFlow(fakeCsproj.Name);
+			DeleteSpecFlowConfig(configPath);
 		}
 
 		private FileInfo GenerateFakeCsProj(DirectoryInfo directory, FileInfo xproj)
