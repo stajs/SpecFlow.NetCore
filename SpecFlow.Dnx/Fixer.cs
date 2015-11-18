@@ -12,6 +12,7 @@ namespace SpecFlow.Dnx
 
 		public Fixer()
 		{
+			// TODO: Allow for other DNX install locations.
 			_specFlowExe = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), @".dnx\packages\SpecFlow\1.9.0\tools\specflow.exe");
 
 			if (!File.Exists(_specFlowExe))
@@ -77,6 +78,9 @@ namespace SpecFlow.Dnx
 
 			Console.WriteLine("Removing the SpecFlow config file.");
 			File.Delete(configPath);
+
+			if (output.Contains("-> test generation failed"))
+				throw new Exception("SpecFlow generation failed (review the output).");
 		}
 
 		private FileInfo GenerateFakeCsProj(DirectoryInfo directory, FileInfo xproj)
