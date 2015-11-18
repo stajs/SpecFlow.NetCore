@@ -1,0 +1,76 @@
+{
+  "locked": false,
+  "version": 2,
+  "targets": {
+    "DNX,Version=v4.6": {
+      "SpecFlow/1.9.0": {
+        "type": "package",
+        "compile": {
+          "lib/net35/TechTalk.SpecFlow.dll": {}
+        },
+        "runtime": {
+          "lib/net35/TechTalk.SpecFlow.dll": {}
+        }
+      }
+    },
+    "DNX,Version=v4.6/win7-x86": {
+      "SpecFlow/1.9.0": {
+        "type": "package",
+        "compile": {
+          "lib/net35/TechTalk.SpecFlow.dll": {}
+        },
+        "runtime": {
+          "lib/net35/TechTalk.SpecFlow.dll": {}
+        }
+      }
+    },
+    "DNX,Version=v4.6/win7-x64": {
+      "SpecFlow/1.9.0": {
+        "type": "package",
+        "compile": {
+          "lib/net35/TechTalk.SpecFlow.dll": {}
+        },
+        "runtime": {
+          "lib/net35/TechTalk.SpecFlow.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "SpecFlow/1.9.0": {
+      "type": "package",
+      "sha512": "f/7BVLy90tKdCFykotYxu7UK54NKRER79hOWVyT96alHOZXz3OV5XRZNZnsafyg4ZQqQLbYEdX7ozMEoAZwAyA==",
+      "files": [
+        "changelog.txt",
+        "content/App.config.transform",
+        "lib/net35/TechTalk.SpecFlow.dll",
+        "lib/sl3/TechTalk.SpecFlow.Silverlight3.dll",
+        "lib/sl4-wp/TechTalk.SpecFlow.WindowsPhone7.dll",
+        "LICENSE.txt",
+        "SpecFlow.1.9.0.nupkg",
+        "SpecFlow.1.9.0.nupkg.sha512",
+        "SpecFlow.nuspec",
+        "tools/Gherkin.dll",
+        "tools/IKVM.OpenJDK.Core.dll",
+        "tools/IKVM.OpenJDK.Security.dll",
+        "tools/IKVM.OpenJDK.Text.dll",
+        "tools/IKVM.OpenJDK.Util.dll",
+        "tools/IKVM.Runtime.dll",
+        "tools/specflow.exe",
+        "tools/TechTalk.SpecFlow.dll",
+        "tools/TechTalk.SpecFlow.Generator.dll",
+        "tools/TechTalk.SpecFlow.Parser.dll",
+        "tools/TechTalk.SpecFlow.Reporting.dll",
+        "tools/TechTalk.SpecFlow.targets",
+        "tools/TechTalk.SpecFlow.tasks",
+        "tools/TechTalk.SpecFlow.Utils.dll"
+      ]
+    }
+  },
+  "projectFileDependencyGroups": {
+    "": [
+      "SpecFlow >= 1.9.0"
+    ],
+    "DNX,Version=v4.6": []
+  }
+}
