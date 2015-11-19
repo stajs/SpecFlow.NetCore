@@ -24,16 +24,23 @@ namespace SpecFlow.Dnx
 			if (!File.Exists(_specFlowExe))
 				throw new Exception("Can't find SpecFlow: " + _specFlowExe);
 
-			Console.WriteLine("Found SpecFlow: " + _specFlowExe);
+			Console.WriteLine("Found: " + _specFlowExe);
 		}
 
 		public void Fix(DirectoryInfo directory)
 		{
 			Console.WriteLine("Current directory: " + directory);
 			var xproj = GetXproj(directory);
-			var fakeCsproj = GenerateFakeCsProj(directory, xproj);
+			var fakeCsproj = SaveFakeCsProj(directory, xproj);
 			GenerateSpecFlowGlue(directory, fakeCsproj);
+			DeleteFakeCsProj(fakeCsproj);
 			FixXunit(directory);
+		}
+
+		private void DeleteFakeCsProj(FileInfo fakeCsproj)
+		{
+			Console.WriteLine("Removing: " + fakeCsproj.FullName);
+			fakeCsproj.Delete();
 		}
 
 		private void FixXunit(DirectoryInfo directory)
@@ -55,10 +62,15 @@ namespace SpecFlow.Dnx
 		{
 			// Target later version of .NET.
 			// Credit: http://stackoverflow.com/questions/11363202/specflow-fails-when-trying-to-generate-test-execution-report
+
+			Console.WriteLine("Generating specflow.exe.config.");
+
 			var configPath = _specFlowExe + ".config";
-			var configFileContents = "<?xml version=\"1.0\" encoding=\"utf-8\" ?><configuration><startup><supportedRuntime version=\"v4.0.30319\" /></startup></configuration>";
-			File.WriteAllText(configPath, configFileContents);
-			Console.WriteLine("Created SpecFlow config file.");
+			var content = "<?xml version=\"1.0\" encoding=\"utf-8\" ?><configuration><startup><supportedRuntime version=\"v4.0.30319\" /></startup></configuration>";
+			Console.WriteLine(content);
+
+			Console.WriteLine("Saving: " + configPath);
+			File.WriteAllText(configPath, content);
 
 			return configPath;
 		}
@@ -73,7 +85,7 @@ namespace SpecFlow.Dnx
 			if (File.Exists(info.AppConfigPath))
 			{
 				info.TempAppConfigPath = Path.Combine(directory.FullName, $"app.{Guid.NewGuid()}.config");
-				Console.WriteLine("Found existing 'app.config', temporarily moving to " + info.TempAppConfigPath);
+				Console.WriteLine("Found existing app.config, temporarily moving to: " + info.TempAppConfigPath);
 				File.Move(info.AppConfigPath, info.TempAppConfigPath);
 			}
 
@@ -140,7 +152,7 @@ namespace SpecFlow.Dnx
 			if (string.IsNullOrWhiteSpace(info.TempAppConfigPath))
 				return;
 
-			Console.WriteLine("Moving pre-existing app.config back from: " + info.TempAppConfigPath);
+			Console.WriteLine("Moving pre-existing app.config back.");
 			File.Move(info.TempAppConfigPath, info.AppConfigPath);
 		}
 
@@ -153,9 +165,9 @@ namespace SpecFlow.Dnx
 			DeleteAppConfig(configInfo);
 		}
 
-		private FileInfo GenerateFakeCsProj(DirectoryInfo directory, FileInfo xproj)
+		private FileInfo SaveFakeCsProj(DirectoryInfo directory, FileInfo xproj)
 		{
-			Console.WriteLine("Generating fake csproj...");
+			Console.WriteLine("Generating fake csproj.");
 
 			var featureFiles = directory.GetFiles("*.feature", SearchOption.AllDirectories);
 			var sb = new StringBuilder();
@@ -202,7 +214,7 @@ namespace SpecFlow.Dnx
 				throw new Exception("More than one '.xproj' found.");
 
 			var xproj = xprojs.Single();
-			Console.WriteLine("Found xproj: " + xproj.Name);
+			Console.WriteLine("Found: " + xproj.FullName);
 
 			return xproj;
 		}
