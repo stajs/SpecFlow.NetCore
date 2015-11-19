@@ -8,6 +8,12 @@ namespace SpecFlow.Dnx
 {
 	internal class Fixer
 	{
+		private class ConfigInfo
+		{
+			public string AppConfigPath { get; set; }
+			public string TempAppConfigPath { get; set; }
+		}
+
 		public readonly string _specFlowExe;
 
 		public Fixer()
@@ -26,7 +32,7 @@ namespace SpecFlow.Dnx
 			Console.WriteLine("Current directory: " + directory);
 			var xproj = GetXproj(directory);
 			var fakeCsproj = GenerateFakeCsProj(directory, xproj);
-			GenerateSpecFlowGlue(fakeCsproj);
+			GenerateSpecFlowGlue(directory, fakeCsproj);
 			FixXunit(directory);
 		}
 
@@ -55,6 +61,41 @@ namespace SpecFlow.Dnx
 			Console.WriteLine("Created SpecFlow config file.");
 
 			return configPath;
+		}
+
+		private ConfigInfo SaveAppConfig(DirectoryInfo directory)
+		{
+			var info = new ConfigInfo
+			{
+				AppConfigPath = Path.Combine(directory.FullName, "app.config")
+			};
+
+			if (File.Exists(info.AppConfigPath))
+			{
+				info.TempAppConfigPath = Path.Combine(directory.FullName, $"app.{Guid.NewGuid()}.config");
+				Console.WriteLine("Found existing 'app.config', temporarily moving to " + info.TempAppConfigPath);
+				File.Move(info.AppConfigPath, info.TempAppConfigPath);
+			}
+
+			Console.WriteLine("Generating app.config.");
+
+			// TODO: Allow specifying other unit test providers.
+			var content = @"<?xml version=""1.0"" encoding=""utf-8""?>
+<configuration>
+	<configSections>
+		<section name=""specFlow"" type=""TechTalk.SpecFlow.Configuration.ConfigurationSectionHandler, TechTalk.SpecFlow"" />
+	</configSections>
+	<specFlow>
+		<unitTestProvider name=""xUnit"" />
+	</specFlow>
+</configuration>";
+
+			Console.WriteLine(content);
+
+			Console.WriteLine("Saving: " + info.AppConfigPath);
+			File.WriteAllText(info.AppConfigPath, content);
+
+			return info;
 		}
 
 		private void RunSpecFlow(string csproj)
@@ -91,11 +132,25 @@ namespace SpecFlow.Dnx
 			File.Delete(configPath);
 		}
 
-		private void GenerateSpecFlowGlue(FileInfo fakeCsproj)
+		private void DeleteAppConfig(ConfigInfo info)
 		{
-			var configPath = SaveSpecFlowConfig();
+			Console.WriteLine("Removing the app.config.");
+			File.Delete(info.AppConfigPath);
+
+			if (string.IsNullOrWhiteSpace(info.TempAppConfigPath))
+				return;
+
+			Console.WriteLine("Moving pre-existing app.config back from: " + info.TempAppConfigPath);
+			File.Move(info.TempAppConfigPath, info.AppConfigPath);
+		}
+
+		private void GenerateSpecFlowGlue(DirectoryInfo directory, FileInfo fakeCsproj)
+		{
+			var specFlowConfigPath = SaveSpecFlowConfig();
+			var configInfo = SaveAppConfig(directory);
 			RunSpecFlow(fakeCsproj.Name);
-			DeleteSpecFlowConfig(configPath);
+			DeleteSpecFlowConfig(specFlowConfigPath);
+			DeleteAppConfig(configInfo);
 		}
 
 		private FileInfo GenerateFakeCsProj(DirectoryInfo directory, FileInfo xproj)
