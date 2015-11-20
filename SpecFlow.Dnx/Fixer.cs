@@ -203,7 +203,7 @@ namespace SpecFlow.Dnx
 
 			var content = sb.ToString();
 			Console.WriteLine(content);
-			
+
 			var csprojPath = xproj.FullName + ".fake.csproj";
 			Console.WriteLine("Saving: " + csprojPath);
 			File.WriteAllText(csprojPath, content);
