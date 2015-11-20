@@ -3,28 +3,37 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Xml.Linq;
+using System.Xml.XPath;
 
 namespace SpecFlow.Dnx
 {
 	internal class Fixer
 	{
-		private class ConfigInfo
-		{
-			public string AppConfigPath { get; set; }
-			public string TempAppConfigPath { get; set; }
-		}
+		public readonly string SpecFlowExe;
 
-		public readonly string _specFlowExe;
+		private const string AppConfigSpecFlowSectionDefinitionType = "TechTalk.SpecFlow.Configuration.ConfigurationSectionHandler, TechTalk.SpecFlow";
+
+		private const string AppConfigSpecFlowSectionDefinition = @"	<configSections>
+		<section name=""specFlow"" type=""" + AppConfigSpecFlowSectionDefinitionType + @""" />
+	</configSections>";
+
+		private const string AppConfigSpecFlowSectionElement = "unitTestProvider";
+
+		// TODO: Allow specifying other unit test providers.
+		private const string AppConfigSpecFlowSection = @"	<specFlow>
+		<" + AppConfigSpecFlowSectionElement + @" name=""xUnit"" />
+	</specFlow>";
 
 		public Fixer()
 		{
 			// TODO: Allow for other DNX install locations.
-			_specFlowExe = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), @".dnx\packages\SpecFlow\1.9.0\tools\specflow.exe");
+			SpecFlowExe = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), @".dnx\packages\SpecFlow\1.9.0\tools\specflow.exe");
 
-			if (!File.Exists(_specFlowExe))
-				throw new Exception("Can't find SpecFlow: " + _specFlowExe);
+			if (!File.Exists(SpecFlowExe))
+				throw new Exception("Can't find SpecFlow: " + SpecFlowExe);
 
-			Console.WriteLine("Found: " + _specFlowExe);
+			Console.WriteLine("Found: " + SpecFlowExe);
 		}
 
 		public void Fix(DirectoryInfo directory)
@@ -65,7 +74,7 @@ namespace SpecFlow.Dnx
 
 			Console.WriteLine("Generating specflow.exe.config.");
 
-			var configPath = _specFlowExe + ".config";
+			var configPath = SpecFlowExe + ".config";
 			var content = "<?xml version=\"1.0\" encoding=\"utf-8\" ?><configuration><startup><supportedRuntime version=\"v4.0.30319\" /></startup></configuration>";
 			Console.WriteLine(content);
 
@@ -75,45 +84,56 @@ namespace SpecFlow.Dnx
 			return configPath;
 		}
 
-		private ConfigInfo SaveAppConfig(DirectoryInfo directory)
+		private string EnsureAppConfig(DirectoryInfo directory)
 		{
-			var info = new ConfigInfo
-			{
-				AppConfigPath = Path.Combine(directory.FullName, "app.config")
-			};
+			var path = Path.Combine(directory.FullName, "app.config");
 
-			if (File.Exists(info.AppConfigPath))
-			{
-				info.TempAppConfigPath = Path.Combine(directory.FullName, $"app.{Guid.NewGuid()}.config");
-				Console.WriteLine("Found existing app.config, temporarily moving to: " + info.TempAppConfigPath);
-				File.Move(info.AppConfigPath, info.TempAppConfigPath);
-			}
+			if (File.Exists(path))
+				return path;
 
 			Console.WriteLine("Generating app.config.");
 
-			// TODO: Allow specifying other unit test providers.
-			var content = @"<?xml version=""1.0"" encoding=""utf-8""?>
+			var content = $@"<?xml version=""1.0"" encoding=""utf-8""?>
 <configuration>
-	<configSections>
-		<section name=""specFlow"" type=""TechTalk.SpecFlow.Configuration.ConfigurationSectionHandler, TechTalk.SpecFlow"" />
-	</configSections>
-	<specFlow>
-		<unitTestProvider name=""xUnit"" />
-	</specFlow>
+{AppConfigSpecFlowSectionDefinition}
+{AppConfigSpecFlowSection}
 </configuration>";
 
 			Console.WriteLine(content);
 
-			Console.WriteLine("Saving: " + info.AppConfigPath);
-			File.WriteAllText(info.AppConfigPath, content);
+			Console.WriteLine("Saving: " + path);
+			File.WriteAllText(path, content);
 
-			return info;
+			return path;
+		}
+
+		private void ValidateAppConfig(string path)
+		{
+			Console.WriteLine("Validating app.config.");
+
+			// I would rather use the ConfigurationBuilder, but as of beta8 it fails to read an element without
+			// a value, e.g.: <unitTestProvider name="xUnit" />
+			//var config = new ConfigurationBuilder()
+			//	.AddXmlFile(path)
+			//	.Build();
+
+			var file = XDocument.Load(path);
+
+			var definitionType = file.XPathEvaluate("string(/configuration/configSections/section[@name='specFlow']/@type)") as string;
+
+			if (definitionType != AppConfigSpecFlowSectionDefinitionType)
+				throw new Exception("Couldn't find required SpecFlow section handler in app.config. Example:\n" + AppConfigSpecFlowSectionDefinition);
+
+			var element = file.XPathEvaluate("string(/configuration/specFlow/unitTestProvider/@name)") as string;
+
+			if (string.IsNullOrWhiteSpace(element))
+				throw new Exception("Couldn't find required SpecFlow element in app.config. Example:\n" + AppConfigSpecFlowSection);
 		}
 
 		private void RunSpecFlow(string csproj)
 		{
 			// Credit: http://www.marcusoft.net/2010/12/specflowexe-and-mstest.html
-			var command = $"{_specFlowExe} generateall {csproj} /force /verbose";
+			var command = $"{SpecFlowExe} generateall {csproj} /force /verbose";
 			Console.WriteLine("Calling: " + command);
 
 			var p = new Process
@@ -122,7 +142,7 @@ namespace SpecFlow.Dnx
 				{
 					UseShellExecute = false,
 					RedirectStandardOutput = true,
-					FileName = _specFlowExe,
+					FileName = SpecFlowExe,
 					Arguments = $"generateall {csproj} /force /verbose"
 				}
 			};
@@ -144,25 +164,13 @@ namespace SpecFlow.Dnx
 			File.Delete(configPath);
 		}
 
-		private void DeleteAppConfig(ConfigInfo info)
-		{
-			Console.WriteLine("Removing the app.config.");
-			File.Delete(info.AppConfigPath);
-
-			if (string.IsNullOrWhiteSpace(info.TempAppConfigPath))
-				return;
-
-			Console.WriteLine("Moving pre-existing app.config back.");
-			File.Move(info.TempAppConfigPath, info.AppConfigPath);
-		}
-
 		private void GenerateSpecFlowGlue(DirectoryInfo directory, FileInfo fakeCsproj)
 		{
+			var appConfigPath = EnsureAppConfig(directory);
+			ValidateAppConfig(appConfigPath);
 			var specFlowConfigPath = SaveSpecFlowConfig();
-			var configInfo = SaveAppConfig(directory);
 			RunSpecFlow(fakeCsproj.Name);
 			DeleteSpecFlowConfig(specFlowConfigPath);
-			DeleteAppConfig(configInfo);
 		}
 
 		private FileInfo SaveFakeCsProj(DirectoryInfo directory, FileInfo xproj)

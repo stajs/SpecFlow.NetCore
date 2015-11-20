@@ -9,7 +9,7 @@ namespace SpecFlow.Dnx
 		{
 		}
 
-		public static void Main(string[] args)
+		public static int Main(string[] args)
 		{
 			try
 			{
@@ -17,10 +17,12 @@ namespace SpecFlow.Dnx
 				var directory = new DirectoryInfo(path);
 
 				new Fixer().Fix(directory);
+				return 0;
 			}
 			catch (Exception e)
 			{
 				Console.WriteLine("Error: " + e.Message);
+				return -1;
 			}
 		}
 	}
