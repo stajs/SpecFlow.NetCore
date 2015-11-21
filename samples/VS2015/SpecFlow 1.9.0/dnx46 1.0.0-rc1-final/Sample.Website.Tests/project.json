@@ -1,0 +1,17 @@
+﻿{
+	"version": "1.0.0-*",
+	"description": "Sample.Website.Tests Class Library",
+	"authors": [ "stajs" ],
+	"tags": [ "" ],
+	"projectUrl": "",
+	"licenseUrl": "",
+
+	"frameworks": {
+		"dnx46": { }
+	},
+
+	"dependencies": {
+		"Sample.Website": "1.0.0-*",
+		"SpecFlow": "1.9.0"
+	}
+}
