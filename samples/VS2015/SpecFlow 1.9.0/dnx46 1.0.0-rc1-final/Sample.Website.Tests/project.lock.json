@@ -1304,11 +1304,11 @@
           "lib/net35/TechTalk.SpecFlow.dll": {}
         }
       },
-      "SpecFlow.Dnx/1.0.0-alpha4": {
+      "SpecFlow.Dnx/1.0.0-alpha5": {
         "type": "package",
         "dependencies": {
           "SpecFlow": "1.9.0",
-          "System.Xml.XPath.XDocument": "4.0.1-rc2-23513"
+          "System.Xml.XPath.XDocument": "4.0.0"
         },
         "frameworkAssemblies": [
           "Microsoft.CSharp",
@@ -1558,7 +1558,7 @@
           "lib/net46/_._": {}
         }
       },
-      "System.Xml.XPath/4.0.1-rc2-23513": {
+      "System.Xml.XPath/4.0.0": {
         "type": "package",
         "dependencies": {
           "System.Collections": "4.0.10",
@@ -1582,7 +1582,7 @@
           "lib/net46/System.Xml.XPath.dll": {}
         }
       },
-      "System.Xml.XPath.XDocument/4.0.1-rc2-23513": {
+      "System.Xml.XPath.XDocument/4.0.0": {
         "type": "package",
         "dependencies": {
           "System.Diagnostics.Debug": "4.0.10",
@@ -1593,7 +1593,7 @@
           "System.Threading": "4.0.10",
           "System.Xml.ReaderWriter": "4.0.10",
           "System.Xml.XDocument": "4.0.10",
-          "System.Xml.XPath": "4.0.1-rc2-23513"
+          "System.Xml.XPath": "4.0.0"
         },
         "frameworkAssemblies": [
           "mscorlib",
@@ -3025,11 +3025,11 @@
           "lib/net35/TechTalk.SpecFlow.dll": {}
         }
       },
-      "SpecFlow.Dnx/1.0.0-alpha4": {
+      "SpecFlow.Dnx/1.0.0-alpha5": {
         "type": "package",
         "dependencies": {
           "SpecFlow": "1.9.0",
-          "System.Xml.XPath.XDocument": "4.0.1-rc2-23513"
+          "System.Xml.XPath.XDocument": "4.0.0"
         },
         "frameworkAssemblies": [
           "Microsoft.CSharp",
@@ -3279,7 +3279,7 @@
           "lib/net46/_._": {}
         }
       },
-      "System.Xml.XPath/4.0.1-rc2-23513": {
+      "System.Xml.XPath/4.0.0": {
         "type": "package",
         "dependencies": {
           "System.Collections": "4.0.10",
@@ -3303,7 +3303,7 @@
           "lib/net46/System.Xml.XPath.dll": {}
         }
       },
-      "System.Xml.XPath.XDocument/4.0.1-rc2-23513": {
+      "System.Xml.XPath.XDocument/4.0.0": {
         "type": "package",
         "dependencies": {
           "System.Diagnostics.Debug": "4.0.10",
@@ -3314,7 +3314,7 @@
           "System.Threading": "4.0.10",
           "System.Xml.ReaderWriter": "4.0.10",
           "System.Xml.XDocument": "4.0.10",
-          "System.Xml.XPath": "4.0.1-rc2-23513"
+          "System.Xml.XPath": "4.0.0"
         },
         "frameworkAssemblies": [
           "mscorlib",
@@ -4746,11 +4746,11 @@
           "lib/net35/TechTalk.SpecFlow.dll": {}
         }
       },
-      "SpecFlow.Dnx/1.0.0-alpha4": {
+      "SpecFlow.Dnx/1.0.0-alpha5": {
         "type": "package",
         "dependencies": {
           "SpecFlow": "1.9.0",
-          "System.Xml.XPath.XDocument": "4.0.1-rc2-23513"
+          "System.Xml.XPath.XDocument": "4.0.0"
         },
         "frameworkAssemblies": [
           "Microsoft.CSharp",
@@ -5000,7 +5000,7 @@
           "lib/net46/_._": {}
         }
       },
-      "System.Xml.XPath/4.0.1-rc2-23513": {
+      "System.Xml.XPath/4.0.0": {
         "type": "package",
         "dependencies": {
           "System.Collections": "4.0.10",
@@ -5024,7 +5024,7 @@
           "lib/net46/System.Xml.XPath.dll": {}
         }
       },
-      "System.Xml.XPath.XDocument/4.0.1-rc2-23513": {
+      "System.Xml.XPath.XDocument/4.0.0": {
         "type": "package",
         "dependencies": {
           "System.Diagnostics.Debug": "4.0.10",
@@ -5035,7 +5035,7 @@
           "System.Threading": "4.0.10",
           "System.Xml.ReaderWriter": "4.0.10",
           "System.Xml.XDocument": "4.0.10",
-          "System.Xml.XPath": "4.0.1-rc2-23513"
+          "System.Xml.XPath": "4.0.0"
         },
         "frameworkAssemblies": [
           "mscorlib",
@@ -5717,7 +5717,7 @@
     },
     "Microsoft.CodeAnalysis.Common/1.1.0-rc1-20151109-01": {
       "type": "package",
-      "sha512": "5eea4BzS8/ge6aVWbweZ3LxMZumN7lm1hPPjSn3iAS3yi1ozsg1aCZ+lHq2nbS/ZNT+Z3QmTcmKaQd3b4bTqeA==",
+      "sha512": "gC9zpQARTjIOht1dZM5Bp0fbOKA40yh0wHBMG2psLGquche0URbfdB9i1pnCusLospEsRIrNvYl75647BcBVug==",
       "files": [
         "lib/net45/Microsoft.CodeAnalysis.dll",
         "lib/net45/Microsoft.CodeAnalysis.xml",
@@ -5731,7 +5731,7 @@
     },
     "Microsoft.CodeAnalysis.CSharp/1.1.0-rc1-20151109-01": {
       "type": "package",
-      "sha512": "2u8FpEIzbjvW6kveLYDwVgrrw7rkqN123dQSMLL3aRBcNFpKL4+hJkrU5uutsVNmjrzxjQkrSKQjIw6L2yjU9w==",
+      "sha512": "BFhSWMMlp0xLN/ogn71ULN7N0yy/yqJf/wu63x3KjV497n+8OlyiX7ZnbaQiUeafjW5P2vLzvZH99+5s+dH3Dg==",
       "files": [
         "lib/net45/Microsoft.CodeAnalysis.CSharp.dll",
         "lib/net45/Microsoft.CodeAnalysis.CSharp.xml",
@@ -6217,17 +6217,17 @@
         "tools/TechTalk.SpecFlow.Utils.dll"
       ]
     },
-    "SpecFlow.Dnx/1.0.0-alpha4": {
+    "SpecFlow.Dnx/1.0.0-alpha5": {
       "type": "package",
-      "sha512": "xYfbslauMpXEsdBUpvv04uws62/E4eTMDtOaa9OlP+Lk4rG4LLVehE74djMlb8d/mEvbFMHQl8BKOalLNCTy6w==",
+      "sha512": "SkfBzhQMCMcFJkzTQxuFQPjZBN9F6Hz5ov1Gir1a2kjnW5LNSTGo2jih9pom2YPrPxKvewyL6hTjMDRVshF8FA==",
       "files": [
         "app/project.json",
         "app/specflow-dnx",
         "app/specflow-dnx.cmd",
         "lib/dnx46/SpecFlow.Dnx.dll",
         "lib/dnx46/SpecFlow.Dnx.xml",
-        "SpecFlow.Dnx.1.0.0-alpha4.nupkg",
-        "SpecFlow.Dnx.1.0.0-alpha4.nupkg.sha512",
+        "SpecFlow.Dnx.1.0.0-alpha5.nupkg",
+        "SpecFlow.Dnx.1.0.0-alpha5.nupkg.sha512",
         "SpecFlow.Dnx.nuspec"
       ]
     },
@@ -6316,7 +6316,7 @@
     "System.Diagnostics.DiagnosticSource/4.0.0-beta-23516": {
       "type": "package",
       "serviceable": true,
-      "sha512": "WHVhr5/p8UDjqNV7l9PCxZgOufE2tO4XOWva9pau9c7PzJJTdB1By6scO5dgHLpmlB/u4y27Y9AzT8AqtG8sxw==",
+      "sha512": "0uDR/UOmFCNPDCyHEPHhCrk6c1iRnDp00YqwSZ8Qf5aaaJjm4WXnf4Q9xZw4OoApsSiODSypDMdpQU24IxR16A==",
       "files": [
         "lib/dotnet5.2/System.Diagnostics.DiagnosticSource.dll",
         "lib/dotnet5.2/System.Diagnostics.DiagnosticSource.xml",
@@ -6476,7 +6476,7 @@
     "System.Numerics.Vectors/4.1.1-beta-23516": {
       "type": "package",
       "serviceable": true,
-      "sha512": "jphbCfQB30LZBC/8kNQtAaaCcKzCFIFnRyUvYapNOozvleUvwI6sYG9d3/WamMcalnNcHDgIlQ713QOv9aweVA==",
+      "sha512": "FCYCEjc3BXBTpVZTxMqf2m/sGYyDzLwICy5lNKgZzT8WfshJhsTGjJuETwsh1Cwi6bksw9YiTB6yeeWBBJDnTA==",
       "files": [
         "lib/dotnet5.4/System.Numerics.Vectors.dll",
         "lib/MonoAndroid10/_._",
@@ -6583,7 +6583,7 @@
     "System.Reflection.Metadata/1.1.0": {
       "type": "package",
       "serviceable": true,
-      "sha512": "a8VsRm/B0Ik1o5FumSMWmpwbG7cvIIajAYhzTTy9VB9XItByJDQHGZkQTIAdsvVJ6MI5O3uH/lb0izgQDlDIWA==",
+      "sha512": "RLIE4sSt2zngMLuqM6YmxBH99mTumtT4DNZE4+msfEaInUP5iCLQT+BHPl+2cjSAP1pdALyAjLB8RtCB+WGGWQ==",
       "files": [
         "lib/dotnet5.2/System.Reflection.Metadata.dll",
         "lib/dotnet5.2/System.Reflection.Metadata.xml",
@@ -6970,67 +6970,67 @@
         "System.Xml.XDocument.nuspec"
       ]
     },
-    "System.Xml.XPath/4.0.1-rc2-23513": {
+    "System.Xml.XPath/4.0.0": {
       "type": "package",
       "serviceable": true,
-      "sha512": "Vs1jgAe7ilTE0d2PZozXJxrqtKNGT2bZPBgEBJ1+ytJn8knXyKwjOkpf0iQpwIkw2JK1Ahqg1KlwpF40luYXvw==",
+      "sha512": "jalVwhZSwErcW28NZOE3Dqb6B1XA4DAsL15JvykYIKXtXYQU8PI5GXssjF5G0bLm8/6Gko2e1SOjRs/MoeAKrw==",
       "files": [
-        "lib/dotnet5.4/System.Xml.XPath.dll",
+        "lib/dotnet/System.Xml.XPath.dll",
         "lib/MonoAndroid10/_._",
         "lib/MonoTouch10/_._",
         "lib/net46/System.Xml.XPath.dll",
         "lib/xamarinios10/_._",
         "lib/xamarinmac20/_._",
-        "ref/dotnet5.4/de/System.Xml.XPath.xml",
-        "ref/dotnet5.4/es/System.Xml.XPath.xml",
-        "ref/dotnet5.4/fr/System.Xml.XPath.xml",
-        "ref/dotnet5.4/it/System.Xml.XPath.xml",
-        "ref/dotnet5.4/ja/System.Xml.XPath.xml",
-        "ref/dotnet5.4/ko/System.Xml.XPath.xml",
-        "ref/dotnet5.4/ru/System.Xml.XPath.xml",
-        "ref/dotnet5.4/System.Xml.XPath.dll",
-        "ref/dotnet5.4/System.Xml.XPath.xml",
-        "ref/dotnet5.4/zh-hans/System.Xml.XPath.xml",
-        "ref/dotnet5.4/zh-hant/System.Xml.XPath.xml",
+        "ref/dotnet/de/System.Xml.XPath.xml",
+        "ref/dotnet/es/System.Xml.XPath.xml",
+        "ref/dotnet/fr/System.Xml.XPath.xml",
+        "ref/dotnet/it/System.Xml.XPath.xml",
+        "ref/dotnet/ja/System.Xml.XPath.xml",
+        "ref/dotnet/ko/System.Xml.XPath.xml",
+        "ref/dotnet/ru/System.Xml.XPath.xml",
+        "ref/dotnet/System.Xml.XPath.dll",
+        "ref/dotnet/System.Xml.XPath.xml",
+        "ref/dotnet/zh-hans/System.Xml.XPath.xml",
+        "ref/dotnet/zh-hant/System.Xml.XPath.xml",
         "ref/MonoAndroid10/_._",
         "ref/MonoTouch10/_._",
         "ref/net46/System.Xml.XPath.dll",
         "ref/xamarinios10/_._",
         "ref/xamarinmac20/_._",
-        "System.Xml.XPath.4.0.1-rc2-23513.nupkg",
-        "System.Xml.XPath.4.0.1-rc2-23513.nupkg.sha512",
+        "System.Xml.XPath.4.0.0.nupkg",
+        "System.Xml.XPath.4.0.0.nupkg.sha512",
         "System.Xml.XPath.nuspec"
       ]
     },
-    "System.Xml.XPath.XDocument/4.0.1-rc2-23513": {
+    "System.Xml.XPath.XDocument/4.0.0": {
       "type": "package",
       "serviceable": true,
-      "sha512": "0t+890ixqPWt6bOaqGGWCoByYEpy6PPk9EcUAjqTNQNldS2OVAe5Mw7EUDUx+Mk5SlxR0jtgmVtiezPLv4C2aA==",
+      "sha512": "jcdfDF2Vwjab82aFQ1pbVR5I33nPiHwtIhhX9IuZqkZHczAzwXPBYFYjsPTb97uEDIYMZX+UDJgrig2Soa0njQ==",
       "files": [
-        "lib/dotnet5.4/System.Xml.XPath.XDocument.dll",
+        "lib/dotnet/System.Xml.XPath.XDocument.dll",
         "lib/MonoAndroid10/_._",
         "lib/MonoTouch10/_._",
         "lib/net46/System.Xml.XPath.XDocument.dll",
         "lib/xamarinios10/_._",
         "lib/xamarinmac20/_._",
-        "ref/dotnet5.4/de/System.Xml.XPath.XDocument.xml",
-        "ref/dotnet5.4/es/System.Xml.XPath.XDocument.xml",
-        "ref/dotnet5.4/fr/System.Xml.XPath.XDocument.xml",
-        "ref/dotnet5.4/it/System.Xml.XPath.XDocument.xml",
-        "ref/dotnet5.4/ja/System.Xml.XPath.XDocument.xml",
-        "ref/dotnet5.4/ko/System.Xml.XPath.XDocument.xml",
-        "ref/dotnet5.4/ru/System.Xml.XPath.XDocument.xml",
-        "ref/dotnet5.4/System.Xml.XPath.XDocument.dll",
-        "ref/dotnet5.4/System.Xml.XPath.XDocument.xml",
-        "ref/dotnet5.4/zh-hans/System.Xml.XPath.XDocument.xml",
-        "ref/dotnet5.4/zh-hant/System.Xml.XPath.XDocument.xml",
+        "ref/dotnet/de/System.Xml.XPath.XDocument.xml",
+        "ref/dotnet/es/System.Xml.XPath.XDocument.xml",
+        "ref/dotnet/fr/System.Xml.XPath.XDocument.xml",
+        "ref/dotnet/it/System.Xml.XPath.XDocument.xml",
+        "ref/dotnet/ja/System.Xml.XPath.XDocument.xml",
+        "ref/dotnet/ko/System.Xml.XPath.XDocument.xml",
+        "ref/dotnet/ru/System.Xml.XPath.XDocument.xml",
+        "ref/dotnet/System.Xml.XPath.XDocument.dll",
+        "ref/dotnet/System.Xml.XPath.XDocument.xml",
+        "ref/dotnet/zh-hans/System.Xml.XPath.XDocument.xml",
+        "ref/dotnet/zh-hant/System.Xml.XPath.XDocument.xml",
         "ref/MonoAndroid10/_._",
         "ref/MonoTouch10/_._",
         "ref/net46/System.Xml.XPath.XDocument.dll",
         "ref/xamarinios10/_._",
         "ref/xamarinmac20/_._",
-        "System.Xml.XPath.XDocument.4.0.1-rc2-23513.nupkg",
-        "System.Xml.XPath.XDocument.4.0.1-rc2-23513.nupkg.sha512",
+        "System.Xml.XPath.XDocument.4.0.0.nupkg",
+        "System.Xml.XPath.XDocument.4.0.0.nupkg.sha512",
         "System.Xml.XPath.XDocument.nuspec"
       ]
     },
@@ -7234,7 +7234,7 @@
     "": [
       "Sample.Website >= 1.0.0-*",
       "SpecFlow >= 1.9.0",
-      "SpecFlow.Dnx >= 1.0.0-alpha4",
+      "SpecFlow.Dnx >= 1.0.0-alpha5",
       "xunit >= 2.1.0",
       "xunit.abstractions >= 2.0.0",
       "xunit.assert >= 2.1.0",
