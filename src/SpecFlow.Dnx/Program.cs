@@ -5,10 +5,6 @@ namespace SpecFlow.Dnx
 {
 	public class Program
 	{
-		public Program()
-		{
-		}
-
 		public static int Main(string[] args)
 		{
 			try
@@ -21,7 +17,11 @@ namespace SpecFlow.Dnx
 			}
 			catch (Exception e)
 			{
+				var color = Console.ForegroundColor;
+				Console.ForegroundColor = ConsoleColor.Red;
 				Console.WriteLine("Error: " + e.Message);
+				Console.ForegroundColor = color;
+
 				return -1;
 			}
 		}
