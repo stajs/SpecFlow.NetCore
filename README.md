@@ -33,11 +33,9 @@ Update your `project.json`:
 
 **Note:** As of DNX RC1, [`prebuild` scripts seem to be broken](https://github.com/stajs/SpecFlow.Dnx/issues/1). You can run manually from a command line with `dnu build` in the meantime.
 
-### Sample
+### Samples
 
 - https://github.com/stajs/SpecFlow.Dnx/tree/master/samples
-
-
 
 ## Background
 
