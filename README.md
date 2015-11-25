@@ -41,6 +41,8 @@ You can also just call `dnx specflow-dnx` on it's own.
 
 - https://github.com/stajs/SpecFlow.Dnx/tree/master/samples
 
+If you build the samples, you should see `.feature.cs` files and an `app.config` being generated.
+
 ## Background
 
 - https://github.com/techtalk/SpecFlow/issues/471
