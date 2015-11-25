@@ -13,17 +13,23 @@ namespace SpecFlow.Dnx
 				var directory = new DirectoryInfo(path);
 
 				new Fixer().Fix(directory);
+
+				PrintUsingColor("SpecFlow fixed.", ConsoleColor.Green);
 				return 0;
 			}
 			catch (Exception e)
 			{
-				var color = Console.ForegroundColor;
-				Console.ForegroundColor = ConsoleColor.Red;
-				Console.WriteLine("Error: " + e.Message);
-				Console.ForegroundColor = color;
-
+				PrintUsingColor("Error: " + e.Message, ConsoleColor.Red);
 				return -1;
 			}
+		}
+
+		private static void PrintUsingColor(string message, ConsoleColor newColor)
+		{
+			var oldColor = Console.ForegroundColor;
+			Console.ForegroundColor = newColor;
+			Console.WriteLine(message);
+			Console.ForegroundColor = oldColor;
 		}
 	}
 }

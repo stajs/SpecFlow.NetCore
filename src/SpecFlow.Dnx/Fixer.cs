@@ -133,8 +133,8 @@ namespace SpecFlow.Dnx
 		private void RunSpecFlow(string csproj)
 		{
 			// Credit: http://www.marcusoft.net/2010/12/specflowexe-and-mstest.html
-			var command = $"{SpecFlowExe} generateall {csproj} /force /verbose";
-			Console.WriteLine("Calling: " + command);
+			var arguments = $"generateall {csproj} /force /verbose";
+			Console.WriteLine($"Calling: {SpecFlowExe} {arguments}");
 
 			var p = new Process
 			{
@@ -143,7 +143,7 @@ namespace SpecFlow.Dnx
 					UseShellExecute = false,
 					RedirectStandardOutput = true,
 					FileName = SpecFlowExe,
-					Arguments = $"generateall {csproj} /force /verbose"
+					Arguments = arguments
 				}
 			};
 
