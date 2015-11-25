@@ -15,19 +15,19 @@ Update your `project.json`:
 1. Include [`SpecFlow.Dnx`](https://www.nuget.org/packages/SpecFlow.Dnx):
 ```
 "dependencies": {
-		"SpecFlow.Dnx": "1.0.0-*"
-	},
+	"SpecFlow.Dnx": "1.0.0-*"
+},
 ```
 2. Add a command:
 ```
 "commands": {
-		"specflow-dnx": "SpecFlow.Dnx"
+	"specflow-dnx": "SpecFlow.Dnx"
 },
 ```
 3. Add a `prebuild` script to call your command:
 ```
 "scripts": {
-		"prebuild": [ "dnx specflow-dnx" ]
+	"prebuild": [ "dnx specflow-dnx" ]
 }
 ```
 
