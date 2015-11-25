@@ -13,7 +13,7 @@
 	"dependencies": {
 		"Sample.Website": "1.0.0-*",
 		"SpecFlow": "1.9.0",
-		"SpecFlow.Dnx": "1.0.0-alpha5",
+		"SpecFlow.Dnx": "1.0.0-alpha6",
 		"xunit": "2.1.0",
 		"xunit.abstractions": "2.0.0",
 		"xunit.assert": "2.1.0",
