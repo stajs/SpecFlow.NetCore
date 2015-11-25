@@ -1304,7 +1304,7 @@
           "lib/net35/TechTalk.SpecFlow.dll": {}
         }
       },
-      "SpecFlow.Dnx/1.0.0-alpha6": {
+      "SpecFlow.Dnx/1.0.0-alpha8": {
         "type": "package",
         "dependencies": {
           "SpecFlow": "1.9.0",
@@ -3025,7 +3025,7 @@
           "lib/net35/TechTalk.SpecFlow.dll": {}
         }
       },
-      "SpecFlow.Dnx/1.0.0-alpha6": {
+      "SpecFlow.Dnx/1.0.0-alpha8": {
         "type": "package",
         "dependencies": {
           "SpecFlow": "1.9.0",
@@ -4746,7 +4746,7 @@
           "lib/net35/TechTalk.SpecFlow.dll": {}
         }
       },
-      "SpecFlow.Dnx/1.0.0-alpha6": {
+      "SpecFlow.Dnx/1.0.0-alpha8": {
         "type": "package",
         "dependencies": {
           "SpecFlow": "1.9.0",
@@ -6217,17 +6217,17 @@
         "tools/TechTalk.SpecFlow.Utils.dll"
       ]
     },
-    "SpecFlow.Dnx/1.0.0-alpha6": {
+    "SpecFlow.Dnx/1.0.0-alpha8": {
       "type": "package",
-      "sha512": "cBmnimFjfJHuJw30dFoIMJ05AaxmBxkAgJ7JIGGFGecBMDidMBfAF1TKXU+2fW6rB9VUX751BpEar0e7SjP5fA==",
+      "sha512": "JAGw01sRU8dCfnpPQPzrKdHUDxuZFaEvlsTW0zbFCSXURmbuY2EwwlTVZoIC27QOVvMqW8SjmGRz25vJR/5DsA==",
       "files": [
         "app/project.json",
         "app/specflow-dnx",
         "app/specflow-dnx.cmd",
         "lib/dnx46/SpecFlow.Dnx.dll",
         "lib/dnx46/SpecFlow.Dnx.xml",
-        "SpecFlow.Dnx.1.0.0-alpha6.nupkg",
-        "SpecFlow.Dnx.1.0.0-alpha6.nupkg.sha512",
+        "SpecFlow.Dnx.1.0.0-alpha8.nupkg",
+        "SpecFlow.Dnx.1.0.0-alpha8.nupkg.sha512",
         "SpecFlow.Dnx.nuspec"
       ]
     },
@@ -7234,7 +7234,7 @@
     "": [
       "Sample.Website >= 1.0.0-*",
       "SpecFlow >= 1.9.0",
-      "SpecFlow.Dnx >= 1.0.0-alpha6",
+      "SpecFlow.Dnx >= 1.0.0-alpha8",
       "xunit >= 2.1.0",
       "xunit.abstractions >= 2.0.0",
       "xunit.assert >= 2.1.0",
