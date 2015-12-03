@@ -12,12 +12,13 @@ Wait for the VS extension to support DNX projects. In the meantime, I present...
 
 Update your `project.json`:
 
+<!-- Resort to <pre> since markdown code blocks break the list numbering. -->
 1. Include [`SpecFlow.Dnx`](https://www.nuget.org/packages/SpecFlow.Dnx):
-```
+<pre>
 "dependencies": {
 	"SpecFlow.Dnx": "1.0.0-*"
 },
-```
+</pre>
 2. Add a command:
 ```
 "commands": {
