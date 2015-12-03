@@ -13,7 +13,7 @@ Wait for the VS extension to support DNX projects. In the meantime, I present...
 Update your `project.json`:
 
 <!-- Resort to <pre> since markdown code blocks break the list numbering. -->
-1. Include [`SpecFlow.Dnx`](https://www.nuget.org/packages/SpecFlow.Dnx):
+1. Include [`SpecFlow.Dnx`]:
 <pre>
 	"dependencies": {
 		"SpecFlow.Dnx": "1.0.0-*"
@@ -34,7 +34,7 @@ Update your `project.json`:
 
 ### Visual Studio
 
-As of DNX RC1, [you have to "produce outputs"](https://github.com/aspnet/Home/issues/432) to pipe the build through `dnu`:
+As of DNX RC1, [you have to "produce outputs"] to pipe the build through `dnu`:
 
 ![image](https://cloud.githubusercontent.com/assets/2253814/11394282/f096a800-93c8-11e5-8b62-03d80cfb1b0e.png)
 
@@ -50,13 +50,58 @@ You can run manually with `dnu build` (or just call `dnx specflow-dnx` on it's o
 
 - `dnx46`
 
-PRs to add support for other frameworks are welcome as long as they include an accompanying sample.
+PR's to add support for other frameworks are welcome as long as they include an accompanying sample.
 
 #### Samples
 
-- https://github.com/stajs/SpecFlow.Dnx/tree/master/samples
+If you build the [samples] solution, you should see `.feature.cs` files and an `app.config` being generated.
 
-If you build the samples, you should see `.feature.cs` files and an `app.config` being generated.
+## Test Frameworks
+
+The auto-generated `app.config` is configured to use [xUnit]:
+
+```xml
+<unitTestProvider name="xUnit" />
+```
+
+This can be changed as per the [SpecFlow Configuration Documentation], however (at time of writing) no other test frameworks are available for dnx.
+
+### Test Explorer
+
+xUnit how been updated to work both with `dnx` and the Visual Studio Test Explorer. In order to make your project compatible with Test Explorer, please follow these steps:
+
+1. Add a dependency to `xunit`. _(At time of writing, version `2.1.0`)_
+2. Add a dependency to `xunit.runner.dnx`. _(At time of writing, version `2.1.0-rc1-build204`)_
+3. Add a command to execute the xunit runner:
+
+```json
+"test": "xunit.runner.dnx"
+```
+
+> Note: It is important that the command used is "test". This is a convention used by Test Explorer, and will not work without it.
+
+Here is a complete sample `project.json` for reference:
+
+```json
+{
+	"version": "1.0.0-*",
+	"dependencies": {
+		"SpecFlow.Dnx": "1.0.0-alpha8",
+		"xunit": "2.1.0",
+		"xunit.runner.dnx": "2.1.0-rc1-build204"
+	},
+	"commands": {
+		"create-specs": "SpecFlow.Dnx",
+		"test": "xunit.runner.dnx"
+	},
+	"scripts": {
+		"prebuild": "dnx create-specs"
+	},
+	"frameworks": {
+		"dnx46": { }
+	}
+}
+```
 
 ## Generating step definitions
 
@@ -82,6 +127,15 @@ Given this should be a short-lived solution, this workaround might be enough.
 
 ## Background
 
-- https://github.com/techtalk/SpecFlow/issues/471
-- https://github.com/techtalk/SpecFlow/issues/457
-- https://groups.google.com/forum/#!topic/specflow/JTKdOTV5nII
+- [SpecFlow Issue 471]: Auto generation of `feature.cs` fails when using MSBuild that comes with VS2015
+- [SpecFlow Issue 457]: SpecFlow "Generate Step Definition" context menu missing in VS2015
+- [SpecFlow Google Group discussing VS2015 & DNX]
+
+	[SpecFlow.Dnx]: https://www.nuget.org/packages/SpecFlow.Dnx
+	[you have to "produce outputs"]: https://github.com/aspnet/Home/issues/432
+	[xUnit]: https://xunit.github.io/
+	[SpecFlow Configuration Documentation]: https://github.com/techtalk/SpecFlow/wiki/Configuration
+	[samples]: https://github.com/stajs/SpecFlow.Dnx/tree/master/samples
+	[SpecFlow Issue 471]: https://github.com/techtalk/SpecFlow/issues/471
+	[SpecFlow Issue 457]: https://github.com/techtalk/SpecFlow/issues/457
+	[SpecFlow Google Group discussing VS2015 & DNX]: https://groups.google.com/forum/#!topic/specflow/JTKdOTV5nII
