@@ -15,22 +15,22 @@ Update your `project.json`:
 <!-- Resort to <pre> since markdown code blocks break the list numbering. -->
 1. Include [`SpecFlow.Dnx`](https://www.nuget.org/packages/SpecFlow.Dnx):
 <pre>
-"dependencies": {
-	"SpecFlow.Dnx": "1.0.0-*"
-},
+	"dependencies": {
+		"SpecFlow.Dnx": "1.0.0-*"
+	},
 </pre>
 2. Add a command:
-```
-"commands": {
-	"specflow-dnx": "SpecFlow.Dnx"
-},
-```
+<pre>
+	"commands": {
+		"specflow-dnx": "SpecFlow.Dnx"
+	},
+</pre>
 3. Add a `prebuild` script to call your command:
-```
-"scripts": {
-	"prebuild": [ "dnx specflow-dnx" ]
-}
-```
+<pre>
+	"scripts": {
+		"prebuild": [ "dnx specflow-dnx" ]
+	}
+</pre>
 
 ### Visual Studio
 
