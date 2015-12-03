@@ -58,6 +58,28 @@ PRs to add support for other frameworks are welcome as long as they include an a
 
 If you build the samples, you should see `.feature.cs` files and an `app.config` being generated.
 
+## Generating step definitions
+
+One of the nice features from the VS extension is being able to easily generate stubs for missing step defintion. This is still _kind_ of possible, but definitely not as nice as the typical usage from the extension.
+
+So, a feature file:
+
+![image](https://cloud.githubusercontent.com/assets/2253814/11574021/299d6d40-9a6e-11e5-9342-3cf9c91565cc.png)
+
+Build to generate the `.feature.cs` file and run it:
+
+![image](https://cloud.githubusercontent.com/assets/2253814/11574057/54f43bb8-9a6e-11e5-91d4-2910c1ee8185.png)
+
+Right-click and `Copy All`:
+
+![image](https://cloud.githubusercontent.com/assets/2253814/11574068/66050a5e-9a6e-11e5-9f7a-264c6935b3b6.png)
+
+Paste in your text editor of choice, then copy out the actual steps:
+
+![image](https://cloud.githubusercontent.com/assets/2253814/11574120/932672c0-9a6e-11e5-8f70-cff5a74c5da6.png)
+
+Given this should be a short-lived solution, this workaround might be enough.
+
 ## Background
 
 - https://github.com/techtalk/SpecFlow/issues/471
