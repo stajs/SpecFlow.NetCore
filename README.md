@@ -17,13 +17,13 @@ Update your `project.json`:
 <pre>
 	"dependencies": {
 		"SpecFlow.Dnx": "1.0.0-*"
-	},
+	}
 </pre>
 2. Add a command:
 <pre>
 	"commands": {
 		"specflow-dnx": "SpecFlow.Dnx"
-	},
+	}
 </pre>
 3. Add a `prebuild` script to call your command:
 <pre>
