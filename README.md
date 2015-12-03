@@ -46,7 +46,17 @@ You can run manually with `dnu build` (or just call `dnx specflow-dnx` on it's o
 
 ![image](https://cloud.githubusercontent.com/assets/2253814/11385431/a6922a22-937d-11e5-9dc4-c47cdeb95595.png)
 
-### Test Frameworks
+### Supported frameworks
+
+- `dnx46`
+
+PR's to add support for other frameworks are welcome as long as they include an accompanying sample.
+
+#### Samples
+
+If you build the [samples] solution, you should see `.feature.cs` files and an `app.config` being generated.
+
+## Test Frameworks
 
 The auto-generated `app.config` is configured to use [xUnit]:
 
@@ -56,7 +66,7 @@ The auto-generated `app.config` is configured to use [xUnit]:
 
 This can be changed as per the [SpecFlow Configuration Documentation], however (at time of writing) no other test frameworks are available for dnx.
 
-#### Test Explorer
+### Test Explorer
 
 xUnit how been updated to work both with `dnx` and the Visual Studio Test Explorer. In order to make your project compatible with Test Explorer, please follow these steps:
 
@@ -93,15 +103,27 @@ Here is a complete sample `project.json` for reference:
 }
 ```
 
-### Supported frameworks
+## Generating step definitions
 
-- `dnx46`
+One of the nice features from the VS extension is being able to easily generate stubs for missing step definitions. This is still _kind_ of possible, but definitely not as nice as the typical usage from the extension.
 
-PR's to add support for other frameworks are welcome as long as they include an accompanying sample.
+So, a feature file:
 
-#### Samples
+![image](https://cloud.githubusercontent.com/assets/2253814/11574021/299d6d40-9a6e-11e5-9342-3cf9c91565cc.png)
 
-If you build the [samples] solution, you should see `.feature.cs` files and an `app.config` being generated.
+Build to generate the `.feature.cs` file and run it:
+
+![image](https://cloud.githubusercontent.com/assets/2253814/11574057/54f43bb8-9a6e-11e5-91d4-2910c1ee8185.png)
+
+Right-click and `Copy All`:
+
+![image](https://cloud.githubusercontent.com/assets/2253814/11574068/66050a5e-9a6e-11e5-9f7a-264c6935b3b6.png)
+
+Paste in your text editor of choice, then copy out the actual steps:
+
+![image](https://cloud.githubusercontent.com/assets/2253814/11574120/932672c0-9a6e-11e5-8f70-cff5a74c5da6.png)
+
+Given this should be a short-lived solution, this workaround might be enough.
 
 ## Background
 
