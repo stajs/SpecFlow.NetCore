@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "SpecFlow.Dnx", "src\SpecFlow.Dnx\SpecFlow.Dnx.xproj", "{0C18D831-66FA-49C4-98EE-ED0D5102487A}"
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "SpecFlow.Dnx", "SpecFlow.Dnx\SpecFlow.Dnx.xproj", "{0C18D831-66FA-49C4-98EE-ED0D5102487A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
