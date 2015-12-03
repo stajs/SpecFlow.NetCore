@@ -45,7 +45,13 @@ You can run manually from a command line with `dnu build` (or just call `dnx spe
 
 ![image](https://cloud.githubusercontent.com/assets/2253814/11385431/a6922a22-937d-11e5-9dc4-c47cdeb95595.png)
 
-### Samples
+### Supported frameworks
+
+- `dnx46`
+
+PRs to add support for other frameworks are welcome as long as they include an accompanying sample.
+
+#### Samples
 
 - https://github.com/stajs/SpecFlow.Dnx/tree/master/samples
 
