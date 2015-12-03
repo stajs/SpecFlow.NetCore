@@ -60,7 +60,7 @@ If you build the samples, you should see `.feature.cs` files and an `app.config`
 
 ## Generating step definitions
 
-One of the nice features from the VS extension is being able to easily generate stubs for missing step defintion. This is still _kind_ of possible, but definitely not as nice as the typical usage from the extension.
+One of the nice features from the VS extension is being able to easily generate stubs for missing step definitions. This is still _kind_ of possible, but definitely not as nice as the typical usage from the extension.
 
 So, a feature file:
 
