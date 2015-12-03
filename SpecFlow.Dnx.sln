@@ -3,7 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "SpecFlow.Dnx", "SpecFlow.Dnx\SpecFlow.Dnx.xproj", "{0C18D831-66FA-49C4-98EE-ED0D5102487A}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{2AC09B0E-A6EA-4AEF-A21E-0EE3DA6CF13C}"
+EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "SpecFlow.Dnx", "src\SpecFlow.Dnx\SpecFlow.Dnx.xproj", "{0C18D831-66FA-49C4-98EE-ED0D5102487A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{BA67F7C6-0601-4B69-AEED-466734DD0BF6}"
+	ProjectSection(SolutionItems) = preProject
+		LICENSE = LICENSE
+		README.md = README.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -18,5 +26,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{0C18D831-66FA-49C4-98EE-ED0D5102487A} = {2AC09B0E-A6EA-4AEF-A21E-0EE3DA6CF13C}
 	EndGlobalSection
 EndGlobal
