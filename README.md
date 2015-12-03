@@ -42,7 +42,7 @@ As of DNX RC1, [you have to "produce outputs"](https://github.com/aspnet/Home/is
 
 ### Command line
 
-You can run manually from a command line with `dnu build` (or just call `dnx specflow-dnx` on it's own):
+You can run manually with `dnu build` (or just call `dnx specflow-dnx` on it's own):
 
 ![image](https://cloud.githubusercontent.com/assets/2253814/11385431/a6922a22-937d-11e5-9dc4-c47cdeb95595.png)
 
