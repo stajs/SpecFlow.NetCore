@@ -31,11 +31,19 @@ Update your `project.json`:
 }
 ```
 
-**Note:** As of DNX RC1, [`prebuild` scripts seem to be broken](https://github.com/stajs/SpecFlow.Dnx/issues/1). You can run manually from a command line with `dnu build` in the meantime:
+### Visual Studio
+
+As of DNX RC1, [you have to "produce outputs"](https://github.com/aspnet/Home/issues/432) to pipe the build through `dnu`:
+
+![image](https://cloud.githubusercontent.com/assets/2253814/11394282/f096a800-93c8-11e5-8b62-03d80cfb1b0e.png)
+
+![image](https://cloud.githubusercontent.com/assets/2253814/11394338/4471d1a2-93c9-11e5-94d1-ac2744f77d84.png)
+
+### Command line
+
+You can run manually from a command line with `dnu build` (or just call `dnx specflow-dnx` on it's own):
 
 ![image](https://cloud.githubusercontent.com/assets/2253814/11385431/a6922a22-937d-11e5-9dc4-c47cdeb95595.png)
-
-You can also just call `dnx specflow-dnx` on it's own.
 
 ### Samples
 
