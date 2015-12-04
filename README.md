@@ -48,13 +48,14 @@ You can run manually with `dnu build` (or just call `dnx specflow-dnx` on it's o
 
 ### Supported frameworks
 
+- `dnx451`
 - `dnx46`
 
 PR's to add support for other frameworks are welcome as long as they include an accompanying sample.
 
 #### Samples
 
-If you build the [samples](https://github.com/stajs/SpecFlow.Dnx/tree/master/samples) solution, you should see `.feature.cs` files and an `app.config` being generated.
+If you build the [samples](https://github.com/stajs/SpecFlow.Dnx/tree/master/samples/VS2015/SpecFlow%201.9.0) solution, you should see `.feature.cs` files and an `app.config` being generated.
 
 ## Test Frameworks
 
@@ -123,7 +124,7 @@ Paste in your text editor of choice, then copy out the actual steps:
 
 ![image](https://cloud.githubusercontent.com/assets/2253814/11574120/932672c0-9a6e-11e5-8f70-cff5a74c5da6.png)
 
-Given this should be a short-lived solution, this workaround might be enough.
+Given this should be a short-lived solution, hopefully this workaround is tolerable.
 
 ## Background
 
