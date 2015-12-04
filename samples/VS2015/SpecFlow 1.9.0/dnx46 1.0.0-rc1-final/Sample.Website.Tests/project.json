@@ -7,8 +7,7 @@
 	"licenseUrl": "",
 
 	"frameworks": {
-		"dnx46": { },
-		"dnx451": { }
+		"dnx46": { }
 	},
 
 	"dependencies": {
