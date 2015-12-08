@@ -105,7 +105,7 @@ Here is a complete sample `project.json` for reference:
 ```
 Examples in Test Explorer:
 
-![image](https://cloud.githubusercontent.com/assets/2253814/11646337/eddd3f4a-9dc1-11e5-833d-b72ec8a56e56.png)
+![image](https://cloud.githubusercontent.com/assets/2253814/11646350/0a806578-9dc2-11e5-9abe-115616ec9aec.png)
 
 ## Generating step definitions
 
