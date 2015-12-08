@@ -21,6 +21,13 @@ namespace Sample.Website.Tests
 			ScenarioContext.Current.Add("versionResult", controller.Version());
 		}
 
+		[When(@"I yell '(.*)'")]
+		public void WhenIYell(string exclamation)
+		{
+			var controller = new HomeController();
+			ScenarioContext.Current.Add("echoResult", controller.Echo(exclamation));
+		}
+
 		[Then(@"the result is content")]
 		public void ThenTheResultIsContent()
 		{
@@ -31,8 +38,15 @@ namespace Sample.Website.Tests
 		[Then(@"the result is constant")]
 		public void ThenTheResultIsConstant()
 		{
-			var versionResult = ScenarioContext.Current["versionResult"] as ContentResult;
+			var versionResult = (ContentResult) ScenarioContext.Current["versionResult"];
 			Assert.Equal(versionResult.Content, HomeController.Dnx);
+		}
+
+		[Then(@"I hear '(.*)' echoed back")]
+		public void ThenIHearEchoedBack(string exclamation)
+		{
+			var echoResult = (ContentResult) ScenarioContext.Current["echoResult"];
+			Assert.Equal(echoResult.Content, exclamation);
 		}
 	}
 }

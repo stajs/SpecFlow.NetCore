@@ -103,6 +103,9 @@ Here is a complete sample `project.json` for reference:
 	}
 }
 ```
+Examples in Test Explorer:
+
+![image](https://i.imgur.com/BaXw38a.png)
 
 ## Generating step definitions
 

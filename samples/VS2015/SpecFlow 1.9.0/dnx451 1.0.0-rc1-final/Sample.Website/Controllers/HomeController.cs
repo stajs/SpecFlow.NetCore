@@ -15,5 +15,10 @@ namespace Sample.Website.Controllers
 		{
 			return Content(Dnx);
 		}
+
+		public IActionResult Echo(string s)
+		{
+			return Content(s);
+		}
 	}
 }
