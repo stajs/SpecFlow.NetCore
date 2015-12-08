@@ -63,8 +63,8 @@ namespace SpecFlow.Dnx
 				Console.WriteLine("Fixed: " + glueFile.FullName);
 				var content = File.ReadAllText(glueFile.FullName);
 				content = content.Replace(" : Xunit.IUseFixture<", " : Xunit.IClassFixture<");
-                content = content.Replace("[Xunit.Extensions", "[Xunit");
-                File.WriteAllText(glueFile.FullName, content);
+				content = content.Replace("[Xunit.Extensions", "[Xunit");
+				File.WriteAllText(glueFile.FullName, content);
 			}
 		}
 
