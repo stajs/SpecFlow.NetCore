@@ -28,7 +28,10 @@ namespace SpecFlow.Dnx
 		public Fixer()
 		{
 			// TODO: Allow for other DNX install locations.
-			SpecFlowExe = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), @".dnx\packages\SpecFlow\1.9.0\tools\specflow.exe");
+			SpecFlowExe = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), @".dnx\packages\SpecFlow\2.0.0\tools\specflow.exe");
+
+            if (!File.Exists(SpecFlowExe))
+                SpecFlowExe = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), @".dnx\packages\SpecFlow\1.9.0\tools\specflow.exe");
 
 			if (!File.Exists(SpecFlowExe))
 				throw new Exception("Can't find SpecFlow: " + SpecFlowExe);
@@ -184,6 +187,10 @@ namespace SpecFlow.Dnx
 			// Set the "ToolsVersion" to VS2013, see: https://github.com/techtalk/SpecFlow/issues/471
 			sb.Append(@"<?xml version=""1.0"" encoding=""utf-8""?>
 <Project ToolsVersion=""14.0"" DefaultTargets=""Build"" xmlns=""http://schemas.microsoft.com/developer/msbuild/2003"">
+	<PropertyGroup>
+		<RootNamespace>SpecFlow.GeneratedTests</RootNamespace>
+		<AssemblyName>SpecFlow.GeneratedTests</AssemblyName>
+	</PropertyGroup>
 	<ItemGroup>
 		<None Include=""app.config"">
 			<SubType>Designer</SubType>

@@ -7,7 +7,6 @@
 	"licenseUrl": "https://github.com/stajs/SpecFlow.Dnx/blob/master/LICENSE",
 
 	"dependencies": {
-		"SpecFlow": "1.9.0"
 	},
 
 	"commands": {
@@ -15,7 +14,7 @@
 	},
 
 	"frameworks": {
-		"net40": {
+		"net451": {
 			"frameworkAssemblies": {
 				"System.Xml": "4.0.0.0",
 				"System.Xml.Linq": "4.0.0.0"
