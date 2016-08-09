@@ -1,0 +1,32 @@
+{
+  "version": "1.0.0-*",
+  "description": "Sample.Website.Tests Class Library",
+  "authors": [ "stajs" ],
+  "packOptions": {
+    "tags": [ "" ],
+    "projectUrl": "",
+    "licenseUrl": ""
+
+  },
+
+  "frameworks": {
+    "net461": {}
+  },
+
+  "dependencies": {
+    "Sample.Website": "1.0.0-*",
+    "SpecFlow": "2.1.0",
+    "xunit": "2.2.0-beta2-build3300",
+    "dotnet-test-xunit": "2.2.0-*",
+  },
+
+  "tools": {
+    "dotnet-specflow": "1.0.0-beta3"
+  },
+
+  "testRunner": "xunit",
+
+  "scripts": {
+    "precompile": [ "dotnet specflow" ]
+  }
+}

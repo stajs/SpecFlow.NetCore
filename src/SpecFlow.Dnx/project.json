@@ -1,24 +1,34 @@
 ﻿{
-	"version": "1.0.0-beta2",
-	"description": "Generate tests from SpecFlow feature files inside DNX projects (.xproj's).",
-	"authors": [ "stajs" ],
-	"tags": [ "SpecFlow", "DNX", "ASP.NET 5", "Visual Studio 2015", "xproj" ],
-	"projectUrl": "https://github.com/stajs/SpecFlow.Dnx",
-	"licenseUrl": "https://github.com/stajs/SpecFlow.Dnx/blob/master/LICENSE",
+  "name": "dotnet-specflow",
+  "version": "1.0.0-beta3",
+  "description": "Generate tests from SpecFlow feature files inside ASP.NET Core projects (.xproj's).",
+  "authors": [ "stajs" ],
 
-	"dependencies": {
-	},
+  "packOptions": {
+    "tags": [ "SpecFlow", "ASP.NET Core", "ASP.NET 5", "Visual Studio 2015", "xproj" ],
+    "projectUrl": "https://github.com/stajs/SpecFlow.Dnx",
+    "licenseUrl": "https://github.com/stajs/SpecFlow.Dnx/blob/master/LICENSE"
+  },
 
-	"commands": {
-		"specflow-dnx": "SpecFlow.Dnx"
-	},
+  "buildOptions": {
+    "emitEntryPoint": true,
+    "outputName": "dotnet-specflow"
+  },
 
-	"frameworks": {
-		"net451": {
-			"frameworkAssemblies": {
-				"System.Xml": "4.0.0.0",
-				"System.Xml.Linq": "4.0.0.0"
-			}
-		}
-	}
+  "dependencies": {
+    "Microsoft.NETCore.App": {
+      "type": "platform",
+      "version": "1.0.0"
+    },
+    "System.Xml.XPath.XDocument": "4.0.1"
+  },
+
+  "frameworks": {
+    "netcoreapp1.0": {}
+  },
+
+  "runtimes": {
+    "win7-x64": {},
+    "win7-x86": {}
+  }
 }
