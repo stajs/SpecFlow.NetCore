@@ -21,12 +21,12 @@
 	},
 
 	"tools": {
-		"dotnet-specflow": "1.0.0-alpha0"
+		"SpecFlow.NetCore": "1.0.0-alpha1"
 	},
 
 	"testRunner": "xunit",
 
 	"scripts": {
-		"precompile": [ "dotnet specflow" ]
+		"precompile": [ "dotnet SpecFlow.NetCore" ]
 	}
 }

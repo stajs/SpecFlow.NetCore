@@ -1,6 +1,5 @@
 ﻿{
-	"name": "dotnet-specflow",
-	"version": "1.0.0-alpha0",
+	"version": "1.0.0-alpha1",
 	"description": "Generate tests from SpecFlow feature files inside ASP.NET Core projects (.xproj's).",
 	"authors": [ "stajs" ],
 
@@ -12,7 +11,7 @@
 
 	"buildOptions": {
 		"emitEntryPoint": true,
-		"outputName": "dotnet-specflow"
+		"outputName": "dotnet-SpecFlow.NetCore"
 	},
 
 	"dependencies": {
