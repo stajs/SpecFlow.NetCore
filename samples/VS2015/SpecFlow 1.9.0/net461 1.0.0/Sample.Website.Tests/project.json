@@ -21,7 +21,7 @@
 	},
 
 	"tools": {
-		"SpecFlow.NetCore": "1.0.0-alpha1"
+		"SpecFlow.NetCore": "1.0.0-rc1"
 	},
 
 	"testRunner": "xunit",
