@@ -1,3 +1,7 @@
+[Support for .NET Core 1.0 has been added](https://github.com/stajs/SpecFlow.Dnx/pull/20), but is not yet available on nuget.org (coming soon!).
+
+
+
 # SpecFlow.Dnx
 
 ## The problem
