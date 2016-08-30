@@ -2,12 +2,6 @@
 	"version": "1.0.0-*",
 	"description": "Sample.Website.Tests Class Library",
 	"authors": [ "stajs" ],
-	"packOptions": {
-		"tags": [ "" ],
-		"projectUrl": "",
-		"licenseUrl": ""
-
-	},
 
 	"frameworks": {
 		"net461": {}
@@ -21,7 +15,7 @@
 	},
 
 	"tools": {
-		"SpecFlow.NetCore": "1.0.0-rc1"
+		"SpecFlow.NetCore": "1.0.0-rc2"
 	},
 
 	"testRunner": "xunit",

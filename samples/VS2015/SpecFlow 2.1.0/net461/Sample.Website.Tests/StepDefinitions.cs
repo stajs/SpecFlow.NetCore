@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNet.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Sample.Website.Controllers;
 using TechTalk.SpecFlow;
 using Xunit;
@@ -39,7 +39,7 @@ namespace Sample.Website.Tests
 		public void ThenTheResultIsConstant()
 		{
 			var versionResult = (ContentResult) ScenarioContext.Current["versionResult"];
-			Assert.Equal(versionResult.Content, HomeController.Dnx);
+			Assert.Equal(versionResult.Content, HomeController.AppVersion);
 		}
 
 		[Then(@"I hear '(.*)' echoed back")]

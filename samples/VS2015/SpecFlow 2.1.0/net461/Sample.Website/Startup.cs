@@ -1,5 +1,5 @@
-﻿using Microsoft.AspNet.Builder;
-using Microsoft.AspNet.Hosting;
+﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Sample.Website
@@ -16,6 +16,14 @@ namespace Sample.Website
 			app.UseMvcWithDefaultRoute();
 		}
 
-		public static void Main(string[] args) => WebApplication.Run<Startup>(args);
+		public static void Main(string[] args)
+		{
+			var host = new WebHostBuilder()
+				.UseStartup<Startup>()
+				.UseKestrel()
+				.Build();
+
+			host.Run();
+		}
 	}
 }
