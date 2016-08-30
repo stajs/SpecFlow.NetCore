@@ -1,5 +1,5 @@
 ﻿{
-	"version": "1.0.0-rc1",
+	"version": "1.0.0-rc2",
 	"description": "Generate tests from SpecFlow feature files inside ASP.NET Core projects (.xproj's).",
 	"authors": [ "stajs" ],
 
@@ -24,13 +24,5 @@
 
 	"frameworks": {
 		"netcoreapp1.0": {}
-	},
-
-	"backup__________________________________________________________________________": {
-		"runtimes": {
-			"description": "As commented on July 2016, these runtimes are undocumented so backed them up for now and can add them back in once I understand what they are doing. https://docs.microsoft.com/en-us/dotnet/articles/core/tools/project-json#frameworks",
-			"win7-x64": {},
-			"win7-x86": {}
-		}
 	}
 }
