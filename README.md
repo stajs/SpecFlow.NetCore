@@ -1,6 +1,6 @@
 # SpecFlow.NetCore
 
-[Support for .NET Core 1.0 has been added](https://github.com/stajs/SpecFlow.Dnx/pull/20), but is not yet available on nuget.org (coming soon!).
+[Support for .NET Core 1.0 has been added](https://www.nuget.org/packages/SpecFlow.NetCore), but the documentation has not been updated yet (coming soon!). In the meantime, [check out the sample](https://github.com/stajs/SpecFlow.NetCore/tree/master/samples/VS2015/SpecFlow%202.1.0/net461).
 
 # ~~SpecFlow.Dnx~~ (Deprecated)
 
