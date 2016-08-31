@@ -61,7 +61,7 @@ namespace SpecFlow.NetCore
 
 	    private void WarnNotExists(FileInfo featureFile)
 	    {
-	        WriteLine("New file generated: " + featureFile.FullName + ".cs. No tests in " + featureFile.Name + " will be discovered by dotnet test");
+	        WriteLine($@"New file generated: {featureFile.FullName}.cs. No tests in {featureFile.Name} will be discovered by dotnet test");
 	    }
 
 	    private void DeleteFakeCsProj(FileInfo fakeCsproj)
