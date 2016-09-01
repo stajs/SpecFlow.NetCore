@@ -25,8 +25,9 @@ namespace SpecFlow.NetCore
 	</specFlow>";
 
 		private readonly string _specFlowExe;
+	    private FileInfo[] featureFiles;
 
-		public Fixer()
+	    public Fixer()
 		{
 			// For full .NET Framework, you can get the user profile with: Environment.GetFolderPath(Environment.SpecialFolder.UserProfile)
 			// This isn't available yet in .NET Core, so rely on the environment variable for now.
@@ -43,14 +44,27 @@ namespace SpecFlow.NetCore
 		public void Fix(DirectoryInfo directory)
 		{
 			WriteLine("Current directory: " + directory);
-			var xproj = GetXproj(directory);
+		    featureFiles = directory.GetFiles("*.feature", SearchOption.AllDirectories);
+		    var generatedFileExists = featureFiles.Where(f => !File.Exists(f.FullName + ".cs")).ToList();
+
+            var xproj = GetXproj(directory);
 			var fakeCsproj = SaveFakeCsProj(directory, xproj);
 			GenerateSpecFlowGlue(directory, fakeCsproj);
 			DeleteFakeCsProj(fakeCsproj);
 			FixXunit(directory);
-		}
 
-		private void DeleteFakeCsProj(FileInfo fakeCsproj)
+            if(generatedFileExists.Any()) { 
+                generatedFileExists.ForEach(WarnNotExists);
+                WriteLine("Rebuild to make the above files discoverable");
+            }
+        }
+
+	    private void WarnNotExists(FileInfo featureFile)
+	    {
+	        WriteLine($@"New file generated: {featureFile.FullName}.cs. No tests in {featureFile.Name} will be discovered by dotnet test");
+	    }
+
+	    private void DeleteFakeCsProj(FileInfo fakeCsproj)
 		{
 			WriteLine("Removing: " + fakeCsproj.FullName);
 			fakeCsproj.Delete();
@@ -171,7 +185,7 @@ namespace SpecFlow.NetCore
 
 		private void GenerateSpecFlowGlue(DirectoryInfo directory, FileInfo fakeCsproj)
 		{
-			var appConfigPath = EnsureAppConfig(directory);
+            var appConfigPath = EnsureAppConfig(directory);
 			ValidateAppConfig(appConfigPath);
 			var specFlowConfigPath = SaveSpecFlowConfig();
 			RunSpecFlow(fakeCsproj.Name);
@@ -182,7 +196,6 @@ namespace SpecFlow.NetCore
 		{
 			WriteLine("Generating fake csproj.");
 
-			var featureFiles = directory.GetFiles("*.feature", SearchOption.AllDirectories);
 			var sb = new StringBuilder();
 
 			// Set the "ToolsVersion" to VS2013, see: https://github.com/techtalk/SpecFlow/issues/471
