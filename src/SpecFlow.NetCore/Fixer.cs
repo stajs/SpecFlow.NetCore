@@ -3,31 +3,16 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Xml.Linq;
-using System.Xml.XPath;
 using static System.Console;
 
 namespace SpecFlow.NetCore
 {
 	internal class Fixer
 	{
-		private const string AppConfigSpecFlowSectionDefinitionType = "TechTalk.SpecFlow.Configuration.ConfigurationSectionHandler, TechTalk.SpecFlow";
-
-		private const string AppConfigSpecFlowSectionDefinition = @"	<configSections>
-		<section name=""specFlow"" type=""" + AppConfigSpecFlowSectionDefinitionType + @""" />
-	</configSections>";
-
-		private const string AppConfigSpecFlowSectionElement = "unitTestProvider";
-
-		// TODO: Allow specifying other unit test providers.
-		private const string AppConfigSpecFlowSection = @"	<specFlow>
-		<" + AppConfigSpecFlowSectionElement + @" name=""xUnit"" />
-	</specFlow>";
-
 		private readonly string _specFlowExe;
-	    private FileInfo[] featureFiles;
+		private FileInfo[] _featureFiles;
 
-	    public Fixer()
+		public Fixer()
 		{
 			// For full .NET Framework, you can get the user profile with: Environment.GetFolderPath(Environment.SpecialFolder.UserProfile)
 			// This isn't available yet in .NET Core, so rely on the environment variable for now.
@@ -44,27 +29,28 @@ namespace SpecFlow.NetCore
 		public void Fix(DirectoryInfo directory)
 		{
 			WriteLine("Current directory: " + directory);
-		    featureFiles = directory.GetFiles("*.feature", SearchOption.AllDirectories);
-		    var generatedFileExists = featureFiles.Where(f => !File.Exists(f.FullName + ".cs")).ToList();
+			_featureFiles = directory.GetFiles("*.feature", SearchOption.AllDirectories);
+			var missingGeneratedFiles = _featureFiles.Where(f => !File.Exists(f.FullName + ".cs")).ToList();
 
-            var xproj = GetXproj(directory);
+			var xproj = GetXproj(directory);
 			var fakeCsproj = SaveFakeCsProj(directory, xproj);
 			GenerateSpecFlowGlue(directory, fakeCsproj);
 			DeleteFakeCsProj(fakeCsproj);
 			FixXunit(directory);
 
-            if(generatedFileExists.Any()) { 
-                generatedFileExists.ForEach(WarnNotExists);
-                WriteLine("Rebuild to make the above files discoverable");
-            }
-        }
+			if (missingGeneratedFiles.Any())
+			{
+				missingGeneratedFiles.ForEach(WarnNotExists);
+				WriteLine("Rebuild to make the above files discoverable, see https://github.com/stajs/SpecFlow.NetCore/issues/22.");
+			}
+		}
 
-	    private void WarnNotExists(FileInfo featureFile)
-	    {
-	        WriteLine($@"New file generated: {featureFile.FullName}.cs. No tests in {featureFile.Name} will be discovered by dotnet test");
-	    }
+		private void WarnNotExists(FileInfo featureFile)
+		{
+			WriteLine($@"New file generated: {featureFile.FullName}.cs. No tests in {featureFile.Name} will be discovered by 'dotnet test'");
+		}
 
-	    private void DeleteFakeCsProj(FileInfo fakeCsproj)
+		private void DeleteFakeCsProj(FileInfo fakeCsproj)
 		{
 			WriteLine("Removing: " + fakeCsproj.FullName);
 			fakeCsproj.Delete();
@@ -103,52 +89,6 @@ namespace SpecFlow.NetCore
 			return configPath;
 		}
 
-		private string EnsureAppConfig(DirectoryInfo directory)
-		{
-			var path = Path.Combine(directory.FullName, "app.config");
-
-			if (File.Exists(path))
-				return path;
-
-			WriteLine("Generating app.config.");
-
-			var content = $@"<?xml version=""1.0"" encoding=""utf-8""?>
-<configuration>
-{AppConfigSpecFlowSectionDefinition}
-{AppConfigSpecFlowSection}
-</configuration>";
-
-			WriteLine(content);
-
-			WriteLine("Saving: " + path);
-			File.WriteAllText(path, content);
-
-			return path;
-		}
-
-		private void ValidateAppConfig(string path)
-		{
-			WriteLine("Validating app.config.");
-
-			// I would rather use the ConfigurationBuilder, but as of beta8 it fails to read an element without
-			// a value, e.g.: <unitTestProvider name="xUnit" />
-			//var config = new ConfigurationBuilder()
-			//	.AddXmlFile(path)
-			//	.Build();
-
-			var file = XDocument.Load(path);
-
-			var definitionType = file.XPathEvaluate("string(/configuration/configSections/section[@name='specFlow']/@type)") as string;
-
-			if (definitionType != AppConfigSpecFlowSectionDefinitionType)
-				throw new Exception("Couldn't find required SpecFlow section handler in app.config. Example:\n" + AppConfigSpecFlowSectionDefinition);
-
-			var element = file.XPathEvaluate("string(/configuration/specFlow/unitTestProvider/@name)") as string;
-
-			if (string.IsNullOrWhiteSpace(element))
-				throw new Exception("Couldn't find required SpecFlow element in app.config. Example:\n" + AppConfigSpecFlowSection);
-		}
-
 		private void RunSpecFlow(string csproj)
 		{
 			// Credit: http://www.marcusoft.net/2010/12/specflowexe-and-mstest.html
@@ -158,12 +98,12 @@ namespace SpecFlow.NetCore
 			var p = new Process
 			{
 				StartInfo =
-					 {
-						  UseShellExecute = false,
-						  RedirectStandardOutput = true,
-						  FileName = _specFlowExe,
-						  Arguments = arguments
-					 }
+				{
+					UseShellExecute = false,
+					RedirectStandardOutput = true,
+					FileName = _specFlowExe,
+					Arguments = arguments
+				}
 			};
 
 			p.Start();
@@ -185,8 +125,7 @@ namespace SpecFlow.NetCore
 
 		private void GenerateSpecFlowGlue(DirectoryInfo directory, FileInfo fakeCsproj)
 		{
-            var appConfigPath = EnsureAppConfig(directory);
-			ValidateAppConfig(appConfigPath);
+			AppConfig.CreateIn(directory).Validate();
 			var specFlowConfigPath = SaveSpecFlowConfig();
 			RunSpecFlow(fakeCsproj.Name);
 			DeleteSpecFlowConfig(specFlowConfigPath);
@@ -210,7 +149,7 @@ namespace SpecFlow.NetCore
 			<SubType>Designer</SubType>
 		</None>");
 
-			foreach (var featureFile in featureFiles)
+			foreach (var featureFile in _featureFiles)
 			{
 				sb.Append($@"
 		<None Include=""{featureFile.FullName.Replace(directory.FullName + Path.DirectorySeparatorChar, "")}"">
