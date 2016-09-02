@@ -40,19 +40,23 @@ Update your `project.json`:
 
 0. Build for your tests to be discovered. **Note:** there is [a bug with the .NET Core CLI requiring a second build for newly added files to be discovered](https://github.com/stajs/SpecFlow.NetCore/issues/22).
 
-### Supported frameworks
+### Samples
+
+If you build the [samples](https://github.com/stajs/SpecFlow.NetCore/tree/master/samples/) solution, you should see `.feature.cs` files and an `app.config` being generated.
+
+## Supported frameworks
+
+### .NET Core
 
 - `netcoreapp1.0`
 - `net46`
 - `net461`
 
-### Samples
+### Test frameworks
 
-If you build the [samples](https://github.com/stajs/SpecFlow.NetCore/tree/master/samples/) solution, you should see `.feature.cs` files and an `app.config` being generated.
+- [xUnit](https://xunit.github.io/)
 
-## Test Frameworks
-
-The auto-generated `app.config` is configured to use [xUnit](https://xunit.github.io/). This can be changed as per the [SpecFlow Configuration Documentation](https://github.com/techtalk/SpecFlow/wiki/Configuration), however (at time of writing) no other test frameworks are available for .NET Core.
+xUnit was the first cab off the rank with support for DNX and then .NET Core. Since then, MsTest and NUnit have become available. Support for these may be added in the future.
 
 ## Visual Studio
 
