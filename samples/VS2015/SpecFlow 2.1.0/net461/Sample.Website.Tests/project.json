@@ -11,12 +11,11 @@
 		"Sample.Website": "1.0.0-*",
 		"SpecFlow": "2.1.0",
 		"xunit": "2.2.0-beta2-build3300",
-		"dotnet-test-xunit": "2.2.0-*",
-		"SpecFlow.NetCore": "1.0.0-rc3"
+		"dotnet-test-xunit": "2.2.0-*"
 	},
 
 	"tools": {
-		"SpecFlow.NetCore": "1.0.0-rc3"
+		"SpecFlow.NetCore": "1.0.0-*"
 	},
 
 	"testRunner": "xunit",
