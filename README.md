@@ -46,7 +46,7 @@ Update your `project.json`:
 - `net46`
 - `net461`
 
-#### Samples
+### Samples
 
 If you build the [samples](https://github.com/stajs/SpecFlow.NetCore/tree/master/samples/) solution, you should see `.feature.cs` files and an `app.config` being generated.
 
