@@ -72,23 +72,6 @@ namespace SpecFlow.NetCore
 			}
 		}
 
-		private string SaveSpecFlowConfig()
-		{
-			// Target later version of .NET.
-			// Credit: http://stackoverflow.com/questions/11363202/specflow-fails-when-trying-to-generate-test-execution-report
-
-			WriteLine("Generating specflow.exe.config.");
-
-			var configPath = _specFlowExe + ".config";
-			var content = "<?xml version=\"1.0\" encoding=\"utf-8\" ?><configuration><startup><supportedRuntime version=\"v4.0.30319\" /></startup></configuration>";
-			WriteLine(content);
-
-			WriteLine("Saving: " + configPath);
-			File.WriteAllText(configPath, content);
-
-			return configPath;
-		}
-
 		private void RunSpecFlow(string csproj)
 		{
 			// Credit: http://www.marcusoft.net/2010/12/specflowexe-and-mstest.html
@@ -126,9 +109,7 @@ namespace SpecFlow.NetCore
 		private void GenerateSpecFlowGlue(DirectoryInfo directory, FileInfo fakeCsproj)
 		{
 			AppConfig.CreateIn(directory).Validate();
-			var specFlowConfigPath = SaveSpecFlowConfig();
 			RunSpecFlow(fakeCsproj.Name);
-			DeleteSpecFlowConfig(specFlowConfigPath);
 		}
 
 		private FileInfo SaveFakeCsProj(DirectoryInfo directory, FileInfo xproj)
