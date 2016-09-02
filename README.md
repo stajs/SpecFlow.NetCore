@@ -64,6 +64,7 @@ xUnit was the first cab off the rank with support for DNX and then .NET Core. Si
 
 ![image](https://cloud.githubusercontent.com/assets/2253814/11646350/0a806578-9dc2-11e5-9abe-115616ec9aec.png)
 
+<!--
 ## Generating step definitions
 
 One of the nice features from the VS extension is being able to easily generate stubs for missing step definitions. This is still _kind_ of possible, but definitely not as nice as the typical usage from the extension.
@@ -85,6 +86,7 @@ One of the nice features from the VS extension is being able to easily generate 
   ![image](https://cloud.githubusercontent.com/assets/2253814/11574120/932672c0-9a6e-11e5-8f70-cff5a74c5da6.png)
 
 Given this should be a short-lived solution, hopefully this workaround is tolerable.
+-->
 
 ## Background
 
