@@ -11,6 +11,7 @@ Wait for the VS extension to support .NET Core projects. In the meantime, I pres
 ## The (hopefully temporary) solution
 
 Update your `project.json`:
+
 0. Include [xUnit](https://github.com/xunit/dotnet-test-xunit):
   ```json
   "dependencies": {
