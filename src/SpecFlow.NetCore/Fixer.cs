@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using static System.Console;
 
 namespace SpecFlow.NetCore
@@ -36,7 +37,7 @@ namespace SpecFlow.NetCore
 			var fakeCsproj = SaveFakeCsProj(directory, xproj);
 			GenerateSpecFlowGlue(directory, fakeCsproj);
 			DeleteFakeCsProj(fakeCsproj);
-			FixXunit(directory);
+			FixTests(directory);
 
 			if (missingGeneratedFiles.Any())
 			{
@@ -56,7 +57,7 @@ namespace SpecFlow.NetCore
 			fakeCsproj.Delete();
 		}
 
-		private void FixXunit(DirectoryInfo directory)
+		private void FixTests(DirectoryInfo directory)
 		{
 			WriteLine("Fixing SpecFlow generated files for xUnit 2");
 
@@ -64,12 +65,25 @@ namespace SpecFlow.NetCore
 
 			foreach (var glueFile in glueFiles)
 			{
-				WriteLine("Fixed: " + glueFile.FullName);
+				WriteLine("Fixing: " + glueFile.FullName);
 				var content = File.ReadAllText(glueFile.FullName);
-				content = content.Replace(" : Xunit.IUseFixture<", " : Xunit.IClassFixture<");
-				content = content.Replace("[Xunit.Extensions", "[Xunit");
+				content = FixXUnit(content);
+				content = FixMsTest(content);
 				File.WriteAllText(glueFile.FullName, content);
 			}
+		}
+
+		private static string FixMsTest(string content)
+		{
+			content = Regex.Replace(content, ".*Microsoft.VisualStudio.TestTools.UnitTesting.Description.*", "");
+			return content;
+		}
+
+		private static string FixXUnit(string content)
+		{
+			content = content.Replace(" : Xunit.IUseFixture<", " : Xunit.IClassFixture<");
+			content = content.Replace("[Xunit.Extensions", "[Xunit");
+			return content;
 		}
 
 		private void RunSpecFlow(string csproj)
@@ -98,12 +112,6 @@ namespace SpecFlow.NetCore
 
 			if (output.Contains("-> test generation failed"))
 				throw new Exception("SpecFlow generation failed (review the output).");
-		}
-
-		private void DeleteSpecFlowConfig(string configPath)
-		{
-			WriteLine("Removing the SpecFlow config file.");
-			File.Delete(configPath);
 		}
 
 		private void GenerateSpecFlowGlue(DirectoryInfo directory, FileInfo fakeCsproj)

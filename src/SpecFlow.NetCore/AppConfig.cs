@@ -1,7 +1,10 @@
 using System;
 using System.IO;
+using System.Linq;
 using System.Xml.Linq;
 using System.Xml.XPath;
+using Newtonsoft.Json;
+using Specflow.NetCore;
 using static System.Console;
 
 namespace SpecFlow.NetCore
@@ -18,7 +21,7 @@ namespace SpecFlow.NetCore
 		public const string SpecFlowSectionElement = "unitTestProvider";
 
 		public const string SpecFlowSection = @"	<specFlow>
-		<" + SpecFlowSectionElement + @" name=""xUnit"" />
+		<" + SpecFlowSectionElement + @" name=""{0}"" />
 	</specFlow>";
 		#endregion
 
@@ -42,7 +45,7 @@ namespace SpecFlow.NetCore
 			var content = $@"<?xml version=""1.0"" encoding=""utf-8""?>
 <configuration>
 {SpecFlowSectionDefinition}
-{SpecFlowSection}
+{string.Format(SpecFlowSection, GuessUnitTestProvider(directory))}
 </configuration>";
 
 			WriteLine(content);
@@ -50,6 +53,24 @@ namespace SpecFlow.NetCore
 			File.WriteAllText(config.Path, content);
 
 			return config;
+		}
+
+		private static string GuessUnitTestProvider(DirectoryInfo directory)
+		{
+			WriteLine("Figuring out test runner. You can always change this later in app.config.");
+			var foundProjectJson = directory.GetFiles().SingleOrDefault(f => f.Name == "project.json");
+			if (foundProjectJson != null)
+			{
+				var projectJson = JsonConvert.DeserializeObject<ProjectJson>(File.ReadAllText(foundProjectJson.FullName));
+				if (projectJson.TestRunner != null)
+				{
+					return projectJson.TestRunner;
+				}
+				WriteLine($@"No ""testRunner"" element found in { foundProjectJson.FullName }. Defaulting to xUnit.");
+				return "xUnit";
+			}
+			WriteLine("No project json found. Defaulting to xUnit.");
+			return "xUnit";
 		}
 
 		public void Validate()

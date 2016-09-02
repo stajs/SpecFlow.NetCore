@@ -15,7 +15,8 @@
 	},
 
 	"dependencies": {
-		"System.Xml.XPath.XDocument": "4.0.1"
+		"System.Xml.XPath.XDocument": "4.0.1",
+		"Newtonsoft.Json": "9.0.1"
 	},
 
 	"frameworks": {
