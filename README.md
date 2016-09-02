@@ -27,7 +27,7 @@ Update your `project.json`:
   ```json
   "tools": {
     "SpecFlow.NetCore": "1.0.0-*"
-  },
+  }
   ```
 
 0. Add a `precompile` script:
@@ -37,7 +37,7 @@ Update your `project.json`:
     "precompile": [ "dotnet SpecFlow.NetCore" ]
   }
   ```
-	
+
 0. Build for your tests to be discovered. **Note:** there is [a bug with the .NET Core CLI requiring a second build for newly added files to be discovered](https://github.com/stajs/SpecFlow.NetCore/issues/22).
 
 ### Supported frameworks
