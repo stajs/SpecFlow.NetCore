@@ -13,6 +13,7 @@ Wait for the VS extension to support .NET Core projects. In the meantime, I pres
 Update your `project.json`:
 
 0. Include [xUnit](https://github.com/xunit/dotnet-test-xunit):
+
   ```json
   "dependencies": {
     "xunit": "2.1.0",
@@ -20,18 +21,23 @@ Update your `project.json`:
   },
   "testRunner": "xunit"
   ```
+
 0. Include [`SpecFlow.NetCore`](https://www.nuget.org/packages/SpecFlow.NetCore):
+
   ```json
   "tools": {
     "SpecFlow.NetCore": "1.0.0-*"
   },
   ```
+
 0. Add a `precompile` script:
+
   ```json
   "scripts": {
     "precompile": [ "dotnet SpecFlow.NetCore" ]
   }
   ```
+	
 0. Build for your tests to be discovered. **Note:** there is [a bug with the .NET Core CLI requiring a second build for newly added files to be discovered](https://github.com/stajs/SpecFlow.NetCore/issues/22).
 
 ### Supported frameworks
