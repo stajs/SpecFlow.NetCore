@@ -100,12 +100,6 @@ namespace SpecFlow.NetCore
 				throw new Exception("SpecFlow generation failed (review the output).");
 		}
 
-		private void DeleteSpecFlowConfig(string configPath)
-		{
-			WriteLine("Removing the SpecFlow config file.");
-			File.Delete(configPath);
-		}
-
 		private void GenerateSpecFlowGlue(DirectoryInfo directory, FileInfo fakeCsproj)
 		{
 			AppConfig.CreateIn(directory).Validate();
