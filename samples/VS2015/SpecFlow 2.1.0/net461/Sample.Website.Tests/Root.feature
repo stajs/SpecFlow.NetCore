@@ -1,16 +1,6 @@
-Feature: Feature in project root
+Feature: Issue 27
 
-Scenario: SpecFlow glue files are generated
-	Given I am curious
-	When I request the version
-	Then the result is content
-
-Scenario Outline: Echo
-	Given I am curious
-	When I yell '<exclamation>'
-	Then I hear '<exclamation>' echoed back
-
-	Examples: 
-		| exclamation    |
-		| Yodelay-yi-hoo |
-		| Helloooo       |
+Scenario: Step definition skeletons are provided
+	Given I don't have step definitions
+	When I run the test
+	Then the step definition skeletons are provided in the test output
