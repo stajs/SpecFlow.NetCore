@@ -9,8 +9,8 @@
 
 	"dependencies": {
 		"SpecFlow": "2.1.0",
-		"xunit": "2.2.0-beta2-build3300",
-		"dotnet-test-xunit": "2.2.0-preview2-build1029"
+		"xunit": "2.2.0-beta3-build3350",
+		"dotnet-test-xunit": "2.2.0-preview3-build1045"
 	},
 
 	"tools": {
