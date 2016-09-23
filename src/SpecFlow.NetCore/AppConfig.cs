@@ -20,6 +20,12 @@ namespace SpecFlow.NetCore
 		public const string SpecFlowSection = @"	<specFlow>
 		<" + SpecFlowSectionElement + @" name=""xUnit"" />
 	</specFlow>";
+
+		public static string Content = $@"<?xml version=""1.0"" encoding=""utf-8""?>
+<configuration>
+{SpecFlowSectionDefinition}
+{SpecFlowSection}
+</configuration>";
 		#endregion
 
 		public string Path { get; }
@@ -37,17 +43,9 @@ namespace SpecFlow.NetCore
 				return config;
 
 			WriteLine("Generating app.config.");
-
-			// Ignore the strange indentation; it is like that so the final file looks right.
-			var content = $@"<?xml version=""1.0"" encoding=""utf-8""?>
-<configuration>
-{SpecFlowSectionDefinition}
-{SpecFlowSection}
-</configuration>";
-
-			WriteLine(content);
+			WriteLine(Content);
 			WriteLine("Saving: " + config.Path);
-			File.WriteAllText(config.Path, content);
+			File.WriteAllText(config.Path, Content);
 
 			return config;
 		}

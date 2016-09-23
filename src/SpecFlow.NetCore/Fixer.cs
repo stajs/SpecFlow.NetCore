@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
+using Specflow.NetCore;
 using static System.Console;
 
 namespace SpecFlow.NetCore
@@ -12,23 +13,51 @@ namespace SpecFlow.NetCore
 		private readonly string _specFlowExe;
 		private FileInfo[] _featureFiles;
 
-		public Fixer()
+		public Fixer(string specFlowPath = null)
 		{
+			_specFlowExe = FindSpecFlow(specFlowPath);
+			WriteLine("Found: " + _specFlowExe);
+		}
+
+		private string FindSpecFlow(string path)
+		{
+			if (!string.IsNullOrWhiteSpace(path))
+			{
+				if (File.Exists(path))
+					return path;
+
+				throw new Exception("Path to SpecFlow was supplied as an argument, but doesn't exist: " + path);
+			}
+
+			const string relativePathToSpecFlow = @"SpecFlow\2.1.0\tools\specflow.exe";
+
+			var nugetPackagesPath = Environment.GetEnvironmentVariable("NUGET_PACKAGES");
+
+			if (!string.IsNullOrWhiteSpace(nugetPackagesPath))
+			{
+				path = Path.Combine(nugetPackagesPath, relativePathToSpecFlow);
+
+				if (File.Exists(path))
+					return path;
+
+				throw new Exception("NUGET_PACKAGES environment variable found, but SpecFlow doesn't exist: " + path);
+			}
+
 			// For full .NET Framework, you can get the user profile with: Environment.GetFolderPath(Environment.SpecialFolder.UserProfile)
 			// This isn't available yet in .NET Core, so rely on the environment variable for now.
 			var userProfile = Environment.GetEnvironmentVariable("USERPROFILE");
 
-			_specFlowExe = Path.Combine(userProfile, @".nuget\packages\SpecFlow\2.1.0\tools\specflow.exe");
+			path = Path.Combine(userProfile, ".nuget", "packages", relativePathToSpecFlow);
 
-			if (!File.Exists(_specFlowExe))
-				throw new Exception("Can't find SpecFlow: " + _specFlowExe);
+			if (File.Exists(path))
+				return path;
 
-			WriteLine("Found: " + _specFlowExe);
+			throw new Exception($"Can't find SpecFlow: {path}\nTry specifying the path with {Args.SpecFlowPathArgName}.");
 		}
 
 		public void Fix(DirectoryInfo directory)
 		{
-			WriteLine("Current directory: " + directory);
+			WriteLine("Current directory: " + directory.FullName);
 			_featureFiles = directory.GetFiles("*.feature", SearchOption.AllDirectories);
 			var missingGeneratedFiles = _featureFiles.Where(f => !File.Exists(f.FullName + ".cs")).ToList();
 
@@ -103,7 +132,7 @@ namespace SpecFlow.NetCore
 		private void GenerateSpecFlowGlue(DirectoryInfo directory, FileInfo fakeCsproj)
 		{
 			AppConfig.CreateIn(directory).Validate();
-			RunSpecFlow(fakeCsproj.Name);
+			RunSpecFlow(fakeCsproj.FullName);
 		}
 
 		private FileInfo SaveFakeCsProj(DirectoryInfo directory, FileInfo xproj)
