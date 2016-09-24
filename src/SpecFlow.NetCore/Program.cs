@@ -1,5 +1,5 @@
 ﻿using System;
-using System.IO;
+using Specflow.NetCore;
 
 namespace SpecFlow.NetCore
 {
@@ -9,10 +9,9 @@ namespace SpecFlow.NetCore
 		{
 			try
 			{
-				var path = args.Length == 1 ? args[0] : Directory.GetCurrentDirectory();
-				var directory = new DirectoryInfo(path);
-
-				new Fixer().Fix(directory);
+				var a = new Args(args);
+				var fixer = new Fixer(a.SpecFlowPath);
+				fixer.Fix(a.WorkingDirectory);
 
 				PrintUsingColor("SpecFlow fixed.", ConsoleColor.Green);
 				return 0;
