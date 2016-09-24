@@ -23,54 +23,75 @@ namespace SpecFlow.NetCore
 		public const string SpecFlowSection = @"	<specFlow>
 		<" + SpecFlowSectionElement + @" name=""{0}"" />
 	</specFlow>";
+
+		public static string Content = $@"<?xml version=""1.0"" encoding=""utf-8""?>
+<configuration>
+{SpecFlowSectionDefinition}
+{SpecFlowSection}
+</configuration>";
 		#endregion
 
 		public string Path { get; }
 
-		public AppConfig(string path)
+		public string TestFramework { get; }
+
+		public AppConfig(string path, string testFramework)
 		{
 			Path = path;
+			TestFramework = testFramework;
 		}
 
-		public static AppConfig CreateIn(DirectoryInfo directory)
+		public static AppConfig CreateIn(DirectoryInfo directory, out string usedTestRunner, string testRunner = null)
 		{
-			var config = new AppConfig(System.IO.Path.Combine(directory.FullName, "app.config"));
+			if (string.IsNullOrWhiteSpace(testRunner))
+			{
+				testRunner = GuessUnitTestProvider(directory);
+			}
+			var config = new AppConfig(System.IO.Path.Combine(directory.FullName, "app.config"), testRunner);
 
+			WriteLine($@"Using test runner ""{testRunner}""");
+			usedTestRunner = testRunner;
 			if (File.Exists(config.Path))
+			{
+				config.ChangeTestProviderIfNeeded(testRunner);
 				return config;
+			}
 
-			WriteLine("Generating app.config.");
-
-			// Ignore the strange indentation; it is like that so the final file looks right.
-			var content = $@"<?xml version=""1.0"" encoding=""utf-8""?>
-<configuration>
-{SpecFlowSectionDefinition}
-{string.Format(SpecFlowSection, GuessUnitTestProvider(directory))}
-</configuration>";
-
-			WriteLine(content);
+			Content = string.Format(Content, testRunner);
+			WriteLine("Generating app.config");
+			WriteLine(Content);
 			WriteLine("Saving: " + config.Path);
-			File.WriteAllText(config.Path, content);
+			File.WriteAllText(config.Path, Content);
 
 			return config;
 		}
 
-		private static string GuessUnitTestProvider(DirectoryInfo directory)
+		public void ChangeTestProviderIfNeeded(string testRunner)
 		{
-			WriteLine("Figuring out test runner. You can always change this later in app.config.");
-			var foundProjectJson = directory.GetFiles().SingleOrDefault(f => f.Name == "project.json");
-			if (foundProjectJson != null)
+			var file = XDocument.Load(Path);
+
+			var currentTestRunner = GetTestProvider(file);
+			if (!string.IsNullOrWhiteSpace(currentTestRunner) && testRunner == currentTestRunner)
+				return;
+
+			var configXml = file.Descendants("configuration").FirstOrDefault();
+			var specFlowXml = configXml?.Descendants("specFlow").FirstOrDefault();
+			var unitTestProviderXml = specFlowXml?.Descendants("unitTestProvider").FirstOrDefault();
+			if (unitTestProviderXml != null)
 			{
-				var projectJson = JsonConvert.DeserializeObject<ProjectJson>(File.ReadAllText(foundProjectJson.FullName));
-				if (projectJson.TestRunner != null)
-				{
-					return projectJson.TestRunner;
-				}
-				WriteLine($@"No ""testRunner"" element found in { foundProjectJson.FullName }. Defaulting to xUnit.");
-				return "xUnit";
+				unitTestProviderXml.Attribute("name").Value = testRunner;
+				WriteLine("unitTestProviderXml Name attribute = " + unitTestProviderXml.Attribute("name").Value);
 			}
-			WriteLine("No project json found. Defaulting to xUnit.");
-			return "xUnit";
+			using (var writer = File.CreateText(Path))
+			{
+				file.Save(writer);
+				writer.Flush();
+			}
+		}
+
+		private static string GetTestProvider(XDocument file)
+		{
+			return file.XPathEvaluate("string(/configuration/specFlow/unitTestProvider/@name)") as string;
 		}
 
 		public void Validate()
@@ -90,10 +111,28 @@ namespace SpecFlow.NetCore
 			if (definitionType != SpecFlowSectionDefinitionType)
 				throw new Exception("Couldn't find required SpecFlow section handler in app.config. Example:\n" + SpecFlowSectionDefinition);
 
-			var element = file.XPathEvaluate("string(/configuration/specFlow/unitTestProvider/@name)") as string;
+			var testProvider = GetTestProvider(file);
 
-			if (string.IsNullOrWhiteSpace(element))
+			if (string.IsNullOrWhiteSpace(testProvider))
 				throw new Exception("Couldn't find required SpecFlow element in app.config. Example:\n" + SpecFlowSection);
+		}
+
+		private static string GuessUnitTestProvider(DirectoryInfo directory)
+		{
+			WriteLine($"Guessing test runner from project.json. You can always force a specific test runner using {Args.TestRunnerArgName}");
+			var foundProjectJson = directory.GetFiles().SingleOrDefault(f => f.Name == "project.json");
+			if (foundProjectJson != null)
+			{
+				var projectJson = JsonConvert.DeserializeObject<ProjectJson>(File.ReadAllText(foundProjectJson.FullName));
+				if (projectJson.TestRunner != null)
+				{
+					return projectJson.TestRunner;
+				}
+				WriteLine($@"No ""testRunner"" element found in { foundProjectJson.FullName }. Defaulting to xUnit.");
+				return "xUnit";
+			}
+			WriteLine("No project json found. Defaulting to xUnit.");
+			return "xUnit";
 		}
 	}
 }

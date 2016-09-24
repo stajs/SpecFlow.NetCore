@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using Specflow.NetCore;
 using static System.Console;
 
 namespace SpecFlow.NetCore
@@ -11,12 +12,15 @@ namespace SpecFlow.NetCore
 	internal class Fixer
 	{
 		private readonly string _specFlowExe;
+		private string _testRunner;
 		private FileInfo[] _featureFiles;
 
-		public Fixer(string specFlowPath = null)
+		public Fixer(string specFlowPath = null, string testRunner = null)
 		{
 			_specFlowExe = FindSpecFlow(specFlowPath);
 			WriteLine("Found: " + _specFlowExe);
+
+			_testRunner = testRunner;
 		}
 
 		private string FindSpecFlow(string path)
@@ -95,8 +99,14 @@ namespace SpecFlow.NetCore
 			{
 				WriteLine("Fixing: " + glueFile.FullName);
 				var content = File.ReadAllText(glueFile.FullName);
-				content = FixXUnit(content);
-				content = FixMsTest(content);
+				if (_testRunner.Equals("xunit", StringComparison.CurrentCultureIgnoreCase))
+				{
+					content = FixXUnit(content);
+				}
+				else if (_testRunner.Equals("mstest", StringComparison.CurrentCultureIgnoreCase))
+				{
+					content = FixMsTest(content);
+				}
 				File.WriteAllText(glueFile.FullName, content);
 			}
 		}
@@ -117,7 +127,7 @@ namespace SpecFlow.NetCore
 		private void RunSpecFlow(string csproj)
 		{
 			// Credit: http://www.marcusoft.net/2010/12/specflowexe-and-mstest.html
-			var arguments = $"generateall {csproj} /force /verbose";
+			var arguments = $@"generateall ""{csproj}"" /force /verbose";
 			WriteLine($"Calling: {_specFlowExe} {arguments}");
 
 			var p = new Process
@@ -144,7 +154,9 @@ namespace SpecFlow.NetCore
 
 		private void GenerateSpecFlowGlue(DirectoryInfo directory, FileInfo fakeCsproj)
 		{
-			AppConfig.CreateIn(directory).Validate();
+			string usedTestRunner;
+			AppConfig.CreateIn(directory, out usedTestRunner, _testRunner).Validate();
+			_testRunner = usedTestRunner;
 			RunSpecFlow(fakeCsproj.FullName);
 		}
 
