@@ -9,9 +9,11 @@ namespace Specflow.NetCore
 	{
 		public const string SpecFlowPathArgName = "--specflow-path";
 		public const string WorkingDirectoryArgName = "--working-directory";
+		public const string TestRunnerArgName = "--test-framework";
 
 		public string SpecFlowPath { get; }
 		public DirectoryInfo WorkingDirectory { get; }
+		public string TestRunner { get; }
 
 		public Args(string[] args)
 		{
@@ -49,6 +51,10 @@ namespace Specflow.NetCore
 						WorkingDirectory = new DirectoryInfo(value);
 						break;
 
+					case TestRunnerArgName:
+						TestRunner = value;
+						break;
+
 					default:
 						throw new Exception("Unknown argument: " + name);
 				}
@@ -56,6 +62,7 @@ namespace Specflow.NetCore
 
 			WriteLine("SpecFlowPath: " + SpecFlowPath);
 			WriteLine("WorkingDirectory: " + WorkingDirectory.FullName);
+			WriteLine("Test runner: " + WorkingDirectory.FullName);
 		}
 
 		private bool IsOdd(int i)
