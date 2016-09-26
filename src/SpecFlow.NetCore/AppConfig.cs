@@ -31,62 +31,33 @@ namespace SpecFlow.NetCore
 </configuration>";
 		#endregion
 
-		public string Path { get; }
-
+		public DirectoryInfo Directory { get; set; }
+		public string Path => System.IO.Path.Combine(Directory.FullName, "app.config");
 		public string TestFramework { get; }
 
-		public AppConfig(string path, string testFramework)
+		public AppConfig(DirectoryInfo directory, string testFramework)
 		{
-			Path = path;
+			Directory = directory;
 			TestFramework = testFramework;
 		}
 
-		public static AppConfig CreateIn(DirectoryInfo directory, out string usedTestRunner, string testRunner = null)
+		public static AppConfig CreateIn(DirectoryInfo directory, string testFramework = null)
 		{
-			if (string.IsNullOrWhiteSpace(testRunner))
-			{
-				testRunner = GuessUnitTestProvider(directory);
-			}
-			var config = new AppConfig(System.IO.Path.Combine(directory.FullName, "app.config"), testRunner);
+			if (string.IsNullOrWhiteSpace(testFramework))
+				testFramework = GetProjectJsonTestRunner(directory);
 
-			WriteLine($@"Using test runner ""{testRunner}""");
-			usedTestRunner = testRunner;
+			var config = new AppConfig(directory, testFramework);
+
 			if (File.Exists(config.Path))
-			{
-				config.ChangeTestProviderIfNeeded(testRunner);
 				return config;
-			}
 
-			Content = string.Format(Content, testRunner);
+			Content = string.Format(Content, testFramework);
 			WriteLine("Generating app.config");
 			WriteLine(Content);
 			WriteLine("Saving: " + config.Path);
 			File.WriteAllText(config.Path, Content);
 
 			return config;
-		}
-
-		public void ChangeTestProviderIfNeeded(string testRunner)
-		{
-			var file = XDocument.Load(Path);
-
-			var currentTestRunner = GetTestProvider(file);
-			if (!string.IsNullOrWhiteSpace(currentTestRunner) && testRunner == currentTestRunner)
-				return;
-
-			var configXml = file.Descendants("configuration").FirstOrDefault();
-			var specFlowXml = configXml?.Descendants("specFlow").FirstOrDefault();
-			var unitTestProviderXml = specFlowXml?.Descendants("unitTestProvider").FirstOrDefault();
-			if (unitTestProviderXml != null)
-			{
-				unitTestProviderXml.Attribute("name").Value = testRunner;
-				WriteLine("unitTestProviderXml Name attribute = " + unitTestProviderXml.Attribute("name").Value);
-			}
-			using (var writer = File.CreateText(Path))
-			{
-				file.Save(writer);
-				writer.Flush();
-			}
 		}
 
 		private static string GetTestProvider(XDocument file)
@@ -115,24 +86,29 @@ namespace SpecFlow.NetCore
 
 			if (string.IsNullOrWhiteSpace(testProvider))
 				throw new Exception("Couldn't find required SpecFlow element in app.config. Example:\n" + SpecFlowSection);
+
+			var projectJsonTestRunner = GetProjectJsonTestRunner(Directory);
+
+			if (string.IsNullOrWhiteSpace(projectJsonTestRunner))
+				return;
+
+			if (!TestFramework.Equals(projectJsonTestRunner, StringComparison.OrdinalIgnoreCase))
+				throw new Exception($"App.config test provider doesn't match the project.json test runner: {TestFramework} vs {projectJsonTestRunner}");
 		}
 
-		private static string GuessUnitTestProvider(DirectoryInfo directory)
+		private static string GetProjectJsonTestRunner(DirectoryInfo directory)
 		{
-			WriteLine($"Guessing test runner from project.json. You can always force a specific test runner using {Args.TestRunnerArgName}");
 			var foundProjectJson = directory.GetFiles().SingleOrDefault(f => f.Name == "project.json");
-			if (foundProjectJson != null)
-			{
-				var projectJson = JsonConvert.DeserializeObject<ProjectJson>(File.ReadAllText(foundProjectJson.FullName));
-				if (projectJson.TestRunner != null)
-				{
-					return projectJson.TestRunner;
-				}
-				WriteLine($@"No ""testRunner"" element found in { foundProjectJson.FullName }. Defaulting to xUnit.");
-				return "xUnit";
-			}
-			WriteLine("No project json found. Defaulting to xUnit.");
-			return "xUnit";
+
+			if (foundProjectJson == null)
+				throw new Exception("Can't find project.json in directory: " + directory.FullName);
+
+			var projectJson = JsonConvert.DeserializeObject<ProjectJson>(File.ReadAllText(foundProjectJson.FullName));
+
+			if (string.IsNullOrWhiteSpace(projectJson.TestRunner))
+				throw new Exception("project.json doesn't have a testRunner.");
+
+			return projectJson.TestRunner;
 		}
 	}
 }

@@ -12,15 +12,15 @@ namespace SpecFlow.NetCore
 	internal class Fixer
 	{
 		private readonly string _specFlowExe;
-		private string _testRunner;
+		private string _testFramework;
 		private FileInfo[] _featureFiles;
 
-		public Fixer(string specFlowPath = null, string testRunner = null)
+		public Fixer(string specFlowPath = null, string testFramework = null)
 		{
 			_specFlowExe = FindSpecFlow(specFlowPath);
 			WriteLine("Found: " + _specFlowExe);
 
-			_testRunner = testRunner;
+			_testFramework = testFramework;
 		}
 
 		private string FindSpecFlow(string path)
@@ -99,14 +99,12 @@ namespace SpecFlow.NetCore
 			{
 				WriteLine("Fixing: " + glueFile.FullName);
 				var content = File.ReadAllText(glueFile.FullName);
-				if (_testRunner.Equals("xunit", StringComparison.CurrentCultureIgnoreCase))
-				{
-					content = FixXUnit(content);
-				}
-				else if (_testRunner.Equals("mstest", StringComparison.CurrentCultureIgnoreCase))
-				{
+
+				if (_testFramework.Equals("xunit", StringComparison.OrdinalIgnoreCase))
+					content = FixXunit(content);
+				else if (_testFramework.Equals("mstest", StringComparison.OrdinalIgnoreCase))
 					content = FixMsTest(content);
-				}
+
 				File.WriteAllText(glueFile.FullName, content);
 			}
 		}
@@ -117,7 +115,7 @@ namespace SpecFlow.NetCore
 			return content;
 		}
 
-		private static string FixXUnit(string content)
+		private static string FixXunit(string content)
 		{
 			content = content.Replace(" : Xunit.IUseFixture<", " : Xunit.IClassFixture<");
 			content = content.Replace("[Xunit.Extensions", "[Xunit");
@@ -154,9 +152,9 @@ namespace SpecFlow.NetCore
 
 		private void GenerateSpecFlowGlue(DirectoryInfo directory, FileInfo fakeCsproj)
 		{
-			string usedTestRunner;
-			AppConfig.CreateIn(directory, out usedTestRunner, _testRunner).Validate();
-			_testRunner = usedTestRunner;
+			var appConfig = AppConfig.CreateIn(directory);
+			appConfig.Validate();
+			_testFramework = appConfig.TestFramework;
 			RunSpecFlow(fakeCsproj.FullName);
 		}
 

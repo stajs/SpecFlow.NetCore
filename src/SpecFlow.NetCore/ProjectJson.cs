@@ -1,8 +1,7 @@
 ﻿namespace Specflow.NetCore
 {
-    internal class ProjectJson
-    {
+	internal class ProjectJson
+	{
 		public string TestRunner { get; set; }
-
 	}
 }
