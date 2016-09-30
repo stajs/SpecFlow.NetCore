@@ -55,8 +55,7 @@ If you build the [samples](https://github.com/stajs/SpecFlow.NetCore/tree/master
 ### Test frameworks
 
 - [xUnit](https://xunit.github.io/)
-
-xUnit was the first cab off the rank with support for DNX and then .NET Core. Since then, MsTest and NUnit have become available. Support for these may be added in the future.
+- MsTest - _Experimental support added by the community._
 
 ## Visual Studio
 
