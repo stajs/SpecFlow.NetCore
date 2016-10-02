@@ -12,15 +12,35 @@ Wait for the VS extension to support .NET Core projects. In the meantime, I pres
 
 Update your `project.json`:
 
-0. Include [xUnit](https://github.com/xunit/dotnet-test-xunit):
+0. Include your testrunner of choice 
 
-  ```json
-  "dependencies": {
-    "xunit": "2.1.0",
-    "dotnet-test-xunit": "1.0.0-*"
-  },
-  "testRunner": "xunit"
-  ```
+  * [xUnit](https://github.com/xunit/dotnet-test-xunit):
+
+    ```json
+    "dependencies": {
+      "xunit": "2.1.0",
+      "dotnet-test-xunit": "1.0.0-*"
+    },
+    "testRunner": "xunit"
+    ```
+
+  * [NUnit 3](https://github.com/nunit/dotnet-test-nunit) _(Experimental)_:
+    ```json
+    "dependencies": {
+      "NUnit": "3.4.1",
+      "dotnet-test-nunit": "3.4.0-beta-2"
+    },
+    "testRunner": "nunit"
+    ```
+  
+  * [MsTest](https://www.nuget.org/packages/dotnet-test-mstest/1.1.1-preview) _(Experimental)_:
+    ```json
+    "dependencies": {
+      "dotnet-test-mstest": "1.1.1-preview",
+      "MSTest.TestFramework": "1.0.4-preview"
+    },
+    "testRunner": "mstest"
+    ```
 
 0. Include [`SpecFlow.NetCore`](https://www.nuget.org/packages/SpecFlow.NetCore):
 
@@ -42,7 +62,7 @@ Update your `project.json`:
 
 ### Samples
 
-If you build the [samples](https://github.com/stajs/SpecFlow.NetCore/tree/master/samples/) solution, you should see `.feature.cs` files and an `app.config` being generated.
+If you build the [samples](https://github.com/stajs/SpecFlow.NetCore/tree/master/samples/) solution, you should see `.feature.cs` files and an `app.config` being generated for each test framework.
 
 ## Supported frameworks
 
@@ -55,7 +75,8 @@ If you build the [samples](https://github.com/stajs/SpecFlow.NetCore/tree/master
 ### Test frameworks
 
 - [xUnit](https://xunit.github.io/)
-- MsTest - _Experimental support added by the community._
+- [NUnit 3](http://www.nunit.org/) - _Experimental support added by the community._
+- [MsTest](https://blogs.msdn.microsoft.com/visualstudioalm/2016/05/30/announcing-mstest-framework-support-for-net-core-rc2-asp-net-core-rc2/) - _Experimental support added by the community._
 
 ## Visual Studio
 

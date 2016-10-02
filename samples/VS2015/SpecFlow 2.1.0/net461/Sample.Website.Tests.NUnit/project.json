@@ -10,15 +10,15 @@
 	"dependencies": {
 		"Sample.Website": "1.0.0-*",
 		"SpecFlow": "2.1.0",
-		"xunit": "2.2.0-beta2-build3300",
-		"dotnet-test-xunit": "2.2.0-preview2-build1029"
+		"NUnit": "3.4.1",
+		"dotnet-test-nunit": "3.4.0-beta-2"
 	},
 
 	"tools": {
-		"SpecFlow.NetCore": "1.0.0-rc4"
+		"SpecFlow.NetCore": "1.0.0-rc6"
 	},
 
-	"testRunner": "xunit",
+	"testRunner": "nunit",
 
 	"scripts": {
 		"precompile": [ "dotnet SpecFlow.NetCore" ]
