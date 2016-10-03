@@ -1,0 +1,27 @@
+{
+	"version": "1.0.0-*",
+	"description": "Sample.Website.Tests Class Library",
+	"authors": [ "stajs" ],
+
+	"frameworks": {
+		"net461": {}
+	},
+
+
+	"dependencies": {
+		"Sample.Website": "1.0.0-*",
+		"SpecFlow": "2.1.0",
+		"dotnet-test-mstest": "1.1.1-preview",
+		"MSTest.TestFramework": "1.0.4-preview"
+	},
+
+	"tools": {
+		"SpecFlow.NetCore": "1.0.0-rc6"
+	},
+
+	"testRunner": "mstest",
+
+	"scripts": {
+		"precompile": [ "dotnet SpecFlow.NetCore" ]
+	}
+}
