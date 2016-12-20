@@ -68,7 +68,7 @@ namespace SpecFlow.NetCore
 			var specflowVersions = Directory.GetDirectories(specflowVersionsDirectory);
 			var latestSpecflowVersion = specflowVersions.Max();
 			if (specflowVersions.Length > 1)
-				WriteLine("Found multiple versions of SpecFlow in the NUGET_PACKAGES directory, using '{0}'.", latestSpecflowVersion);
+				WriteLine("Found multiple versions of SpecFlow in the '{0}' directory, using '{1}'.", environmentVariable, latestSpecflowVersion);
 			return Path.Combine(specflowVersionsDirectory, latestSpecflowVersion, RelativePathToSpecFlowApplication);
 		}
 
