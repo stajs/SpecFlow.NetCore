@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using Specflow.NetCore;
+
 using static System.Console;
 
 namespace SpecFlow.NetCore
@@ -33,13 +34,11 @@ namespace SpecFlow.NetCore
 				throw new Exception("Path to SpecFlow was supplied as an argument, but doesn't exist: " + path);
 			}
 
-			const string relativePathToSpecFlow = @"SpecFlow\2.1.0\tools\specflow.exe";
-
-			var nugetPackagesPath = Environment.GetEnvironmentVariable("NUGET_PACKAGES");
-
+			const string nuGetPackagesVariable = "NUGET_PACKAGES";
+			var nugetPackagesPath = Environment.GetEnvironmentVariable(nuGetPackagesVariable);
 			if (!string.IsNullOrWhiteSpace(nugetPackagesPath))
 			{
-				path = Path.Combine(nugetPackagesPath, relativePathToSpecFlow);
+				path = ResolveSpecFlowApplication(nuGetPackagesVariable, nugetPackagesPath);
 
 				if (File.Exists(path))
 					return path;
@@ -49,14 +48,28 @@ namespace SpecFlow.NetCore
 
 			// For full .NET Framework, you can get the user profile with: Environment.GetFolderPath(Environment.SpecialFolder.UserProfile)
 			// This isn't available yet in .NET Core, so rely on the environment variable for now.
-			var userProfile = Environment.GetEnvironmentVariable("USERPROFILE");
-
-			path = Path.Combine(userProfile, ".nuget", "packages", relativePathToSpecFlow);
+			const string userProfileVariable = "USERPROFILE";
+			var userProfile = Environment.GetEnvironmentVariable(userProfileVariable);
+			if (!string.IsNullOrWhiteSpace(userProfile))
+				path = ResolveSpecFlowApplication(userProfileVariable, Path.Combine(userProfile, ".nuget", "packages"));
 
 			if (File.Exists(path))
 				return path;
 
 			throw new Exception($"Can't find SpecFlow: {path}\nTry specifying the path with {Args.SpecFlowPathArgName}.");
+		}
+
+		const string RelativePathToSpecFlowApplication = @"tools\specflow.exe";
+		private static string ResolveSpecFlowApplication(string environmentVariable, string rootPath)
+		{
+			var specflowVersionsDirectory = Path.Combine(rootPath, "SpecFlow");
+			if (!Directory.Exists(specflowVersionsDirectory))
+				throw new Exception($"{environmentVariable} environment variable found, but no versions of SpecFlow found: {specflowVersionsDirectory}");
+			var specflowVersions = Directory.GetDirectories(specflowVersionsDirectory);
+			var latestSpecflowVersion = specflowVersions.Max();
+			if (specflowVersions.Length > 1)
+				WriteLine("Found multiple versions of SpecFlow in the NUGET_PACKAGES directory, using '{0}'.", latestSpecflowVersion);
+			return Path.Combine(specflowVersionsDirectory, latestSpecflowVersion, RelativePathToSpecFlowApplication);
 		}
 
 		public void Fix(DirectoryInfo directory)

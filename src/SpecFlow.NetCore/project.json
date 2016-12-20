@@ -1,5 +1,5 @@
 ﻿{
-	"version": "1.0.0-rc7",
+	"version": "1.0.0-rc8",
 	"description": "Generate tests from SpecFlow feature files inside ASP.NET Core projects (.xproj's).",
 	"authors": [ "stajs" ],
 
