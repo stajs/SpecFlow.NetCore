@@ -1,0 +1,40 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <Description>Generate tests from SpecFlow feature files inside ASP.NET Core projects (.xproj's).</Description>
+    <VersionPrefix>1.0.0-rc7</VersionPrefix>
+    <Authors>stajs</Authors>
+    <TargetFrameworks>netcoreapp1.0;net46;net461</TargetFrameworks>
+    <RuntimeIdentifiers>win7-x64;win7-x86;osx.10.10-x64;osx.10.11-x64;ubuntu.14.04-x64;ubuntu.16.04-x64;centos.7-x64;rhel.7.2-x64;debian.8-x64;fedora.23-x64;opensuse.13.2-x64</RuntimeIdentifiers>
+    <RuntimeIdentifier Condition=" '$(TargetFramework)' == 'net46' OR '$(TargetFramework)' == 'net461' ">win7-x86</RuntimeIdentifier>
+    <AssemblyName>dotnet-SpecFlow.NetCore</AssemblyName>
+    <OutputType>Exe</OutputType>
+    <PackageId>SpecFlow.NetCore</PackageId>
+    <PackageTags>SpecFlow;.NET Core;ASP.NET Core;ASP.NET 5;Visual Studio 2015;xproj</PackageTags>
+    <PackageProjectUrl>https://github.com/stajs/SpecFlow.NetCore</PackageProjectUrl>
+    <PackageLicenseUrl>https://github.com/stajs/SpecFlow.NetCore/blob/master/LICENSE</PackageLicenseUrl>
+    <RuntimeFrameworkVersion Condition=" '$(TargetFramework)' == 'netcoreapp1.0' ">1.0.3</RuntimeFrameworkVersion>
+    <GenerateAssemblyTitleAttribute>false</GenerateAssemblyTitleAttribute>
+    <GenerateAssemblyDescriptionAttribute>false</GenerateAssemblyDescriptionAttribute>
+    <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+    <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+    <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+    <GenerateAssemblyCopyrightAttribute>false</GenerateAssemblyCopyrightAttribute>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.Xml.XPath.XDocument" Version="4.0.1" />
+    <PackageReference Include="Newtonsoft.Json" Version="9.0.1" />
+  </ItemGroup>
+
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net46' ">
+    <Reference Include="System" />
+    <Reference Include="Microsoft.CSharp" />
+  </ItemGroup>
+
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net461' ">
+    <Reference Include="System" />
+    <Reference Include="Microsoft.CSharp" />
+  </ItemGroup>
+
+</Project>
