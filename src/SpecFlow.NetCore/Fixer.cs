@@ -65,9 +65,9 @@ namespace SpecFlow.NetCore
 			_featureFiles = directory.GetFiles("*.feature", SearchOption.AllDirectories);
 			var missingGeneratedFiles = _featureFiles.Where(f => !File.Exists(f.FullName + ".cs")).ToList();
 
-			var xproj = GetCsProj(directory);
-			var fakeCsproj = SaveFakeCsProj(directory, xproj);
-			GenerateSpecFlowGlue(directory, fakeCsproj, xproj);
+			var csproj = GetCsProj(directory);
+			var fakeCsproj = SaveFakeCsProj(directory, csproj);
+			GenerateSpecFlowGlue(directory, fakeCsproj, csproj);
 			DeleteFakeCsProj(fakeCsproj);
 			FixTests(directory);
 
