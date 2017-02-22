@@ -65,9 +65,9 @@ namespace SpecFlow.NetCore
 			_featureFiles = directory.GetFiles("*.feature", SearchOption.AllDirectories);
 			var missingGeneratedFiles = _featureFiles.Where(f => !File.Exists(f.FullName + ".cs")).ToList();
 
-			var xproj = GetXproj(directory);
+			var xproj = GetCsProj(directory);
 			var fakeCsproj = SaveFakeCsProj(directory, xproj);
-			GenerateSpecFlowGlue(directory, fakeCsproj);
+			GenerateSpecFlowGlue(directory, fakeCsproj, xproj);
 			DeleteFakeCsProj(fakeCsproj);
 			FixTests(directory);
 
@@ -150,15 +150,15 @@ namespace SpecFlow.NetCore
 				throw new Exception("SpecFlow generation failed (review the output).");
 		}
 
-		private void GenerateSpecFlowGlue(DirectoryInfo directory, FileInfo fakeCsproj)
+		private void GenerateSpecFlowGlue(DirectoryInfo directory, FileInfo fakeCsproj, FileInfo csproj)
 		{
-			var appConfig = AppConfig.CreateIn(directory);
-			appConfig.Validate();
+			var appConfig = AppConfig.CreateIn(directory, csproj);
+			appConfig.Validate(csproj);
 			_testFramework = appConfig.TestFramework;
 			RunSpecFlow(fakeCsproj.FullName);
 		}
 
-		private FileInfo SaveFakeCsProj(DirectoryInfo directory, FileInfo xproj)
+		private FileInfo SaveFakeCsProj(DirectoryInfo directory, FileInfo csproj)
 		{
 			WriteLine("Generating fake csproj.");
 
@@ -192,27 +192,27 @@ namespace SpecFlow.NetCore
 			var content = sb.ToString();
 			WriteLine(content);
 
-			var csprojPath = xproj.FullName + ".fake.csproj";
-			WriteLine("Saving: " + csprojPath);
-			File.WriteAllText(csprojPath, content);
+			var fakecsprojPath = csproj.FullName + ".fake.csproj";
+			WriteLine("Saving: " + fakecsprojPath);
+			File.WriteAllText(fakecsprojPath, content);
 
-			return new FileInfo(csprojPath);
+			return new FileInfo(fakecsprojPath);
 		}
 
-		private FileInfo GetXproj(DirectoryInfo directory)
+		private FileInfo GetCsProj(DirectoryInfo directory)
 		{
-			var xprojs = directory.GetFiles("*.xproj", SearchOption.TopDirectoryOnly);
+			var csprojs = directory.GetFiles("*.csproj", SearchOption.TopDirectoryOnly);
 
-			if (xprojs.Length == 0)
-				throw new Exception("Could not find '.xproj'.");
+			if (csprojs.Length == 0)
+				throw new Exception("Could not find '.csproj'.");
 
-			if (xprojs.Length > 1)
-				throw new Exception("More than one '.xproj' found.");
+			if (csprojs.Length > 1)
+				throw new Exception("More than one '.csproj' found.");
 
-			var xproj = xprojs.Single();
-			WriteLine("Found: " + xproj.FullName);
+			var csproj = csprojs.Single();
+			WriteLine("Found: " + csproj.FullName);
 
-			return xproj;
+			return csproj;
 		}
 	}
 }
