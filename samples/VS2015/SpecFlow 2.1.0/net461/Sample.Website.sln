@@ -1,20 +1,17 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.26206.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Sample.Website", "Sample.Website\Sample.Website.xproj", "{D0D56730-C846-442A-ACE7-1059240B4109}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{004FCD9D-539C-4CCA-9780-EC56517946C5}"
-	ProjectSection(SolutionItems) = preProject
-		global.json = global.json
-	EndProjectSection
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Sample.Website.Tests.NUnit", "Sample.Website.Tests.NUnit\Sample.Website.Tests.NUnit.xproj", "{1182F5AF-9ABF-4D9C-AF8B-9331AD376E87}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sample.Website", "Sample.Website\Sample.Website.csproj", "{D0D56730-C846-442A-ACE7-1059240B4109}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Sample.Website.Tests.MSTest", "Sample.Website.Tests.MSTest\Sample.Website.Tests.MSTest.xproj", "{B26DC82D-DF30-4774-ABE6-E17B18FEDFFA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sample.Website.Tests.NUnit", "Sample.Website.Tests.NUnit\Sample.Website.Tests.NUnit.csproj", "{1182F5AF-9ABF-4D9C-AF8B-9331AD376E87}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Sample.Website.Tests.XUnit", "Sample.Website.Tests.XUnit\Sample.Website.Tests.XUnit.xproj", "{785BC4A8-774E-45EC-B99B-E8F9BDA0AE19}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sample.Website.Tests.MSTest", "Sample.Website.Tests.MSTest\Sample.Website.Tests.MSTest.csproj", "{B26DC82D-DF30-4774-ABE6-E17B18FEDFFA}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sample.Website.Tests.XUnit", "Sample.Website.Tests.XUnit\Sample.Website.Tests.XUnit.csproj", "{785BC4A8-774E-45EC-B99B-E8F9BDA0AE19}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
