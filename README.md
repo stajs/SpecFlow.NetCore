@@ -4,6 +4,8 @@
 
 As at the time of writing (September 2016), the `SpecFlow for Visual Studio 2015` extension does not play well with .NET Core projects (`.xproj`).
 
+**Updated Feb 2017 to work with the 1.0.0-rc4 tooling and .csproj**
+
 ## The solution
 
 Wait for the VS extension to support .NET Core projects. In the meantime, I present...
@@ -11,51 +13,58 @@ Wait for the VS extension to support .NET Core projects. In the meantime, I pres
 ## The (hopefully temporary) solution
 
 Update your `project.json`:
+Update your test projects .csproj or add a reference to the project in Visual Studio 2017
 
 0. Include your testrunner of choice 
 
   * [xUnit](https://github.com/xunit/dotnet-test-xunit):
+  Reference to the xunit package is used to identify xunit as the testrunner
 
-    ```json
-    "dependencies": {
-      "xunit": "2.1.0",
-      "dotnet-test-xunit": "1.0.0-*"
-    },
-    "testRunner": "xunit"
+    ```xml
+    <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.0.0-preview-20170106-08" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.2.0-beta5-build1225" />
+    <PackageReference Include="SpecFlow" Version="2.1.0" />
+    <PackageReference Include="xunit" Version="2.2.0-beta5-build3474" />
+    </ItemGroup>
     ```
 
   * [NUnit 3](https://github.com/nunit/dotnet-test-nunit) _(Experimental)_:
-    ```json
-    "dependencies": {
-      "NUnit": "3.4.1",
-      "dotnet-test-nunit": "3.4.0-beta-2"
-    },
-    "testRunner": "nunit"
+    eference to the NUnit package is used to identify xunit as the testrunner
+    ```xml
+     <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.0.0-preview-20170106-08" />
+    <PackageReference Include="SpecFlow" Version="2.1.0" />
+    <PackageReference Include="NUnit" Version="3.4.1" />
+    <PackageReference Include="dotnet-test-nunit" Version="3.4.0-beta-2" />
+    </ItemGroup>
     ```
   
   * [MsTest](https://www.nuget.org/packages/dotnet-test-mstest/1.1.1-preview) _(Experimental)_:
-    ```json
-    "dependencies": {
-      "dotnet-test-mstest": "1.1.1-preview",
-      "MSTest.TestFramework": "1.0.4-preview"
-    },
-    "testRunner": "mstest"
+   Reference to the MSTest.TestFramework package is used to identify xunit as the testrunner
+    ```xml
+    <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.0.0-preview-20170106-08" />
+    <PackageReference Include="MSTest.TestAdapter" Version="1.1.8-rc" />
+    <PackageReference Include="SpecFlow" Version="2.1.0" />
+    <PackageReference Include="MSTest.TestFramework" Version="1.0.8-rc" />
+    </ItemGroup>
     ```
 
 0. Include [`SpecFlow.NetCore`](https://www.nuget.org/packages/SpecFlow.NetCore):
 
-  ```json
-  "tools": {
-    "SpecFlow.NetCore": "1.0.0-*"
-  }
+  ```xml
+  <ItemGroup>
+    <DotNetCliToolReference Include="SpecFlow.NetCore" Version="1.0.0-rc8" />
+  </ItemGroup>
   ```
 
 0. Add a `precompile` script:
 
-  ```json
-  "scripts": {
-    "precompile": [ "dotnet SpecFlow.NetCore" ]
-  }
+  ```xml
+  <Target Name="PrecompileScript" BeforeTargets="BeforeBuild">
+    <Exec Command="dotnet SpecFlow.NetCore" />
+  </Target>
   ```
 
 0. Build for your tests to be discovered. **Note:** there is [a bug with the .NET Core CLI requiring a second build for newly added files to be discovered](https://github.com/stajs/SpecFlow.NetCore/issues/22).
