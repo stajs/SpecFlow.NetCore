@@ -30,7 +30,7 @@ Update your test projects .csproj or add a reference to the project in Visual St
     ```
 
   * [NUnit 3](https://github.com/nunit/dotnet-test-nunit) _(Experimental)_:
-    eference to the NUnit package is used to identify xunit as the testrunner
+    eference to the NUnit package is used to identify nunit as the testrunner
     ```xml
      <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.0.0-preview-20170106-08" />
@@ -41,7 +41,7 @@ Update your test projects .csproj or add a reference to the project in Visual St
     ```
   
   * [MsTest](https://www.nuget.org/packages/dotnet-test-mstest/1.1.1-preview) _(Experimental)_:
-   Reference to the MSTest.TestFramework package is used to identify xunit as the testrunner
+   Reference to the MSTest.TestFramework package is used to identify mstest as the testrunner
     ```xml
     <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.0.0-preview-20170106-08" />
