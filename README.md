@@ -2,9 +2,7 @@
 
 ## The problem
 
-As at the time of writing (September 2016), the `SpecFlow for Visual Studio 2015` extension does not play well with .NET Core projects (`.xproj`).
-
-**Updated Feb 2017 to work with the 1.0.0-rc4 tooling and .csproj**
+As at the time of writing (September 2016), the `SpecFlow for Visual Studio 2015` extension does not play well with .NET Core projects.
 
 ## The solution
 
@@ -12,42 +10,37 @@ Wait for the VS extension to support .NET Core projects. In the meantime, I pres
 
 ## The (hopefully temporary) solution
 
-Update your `project.json`:
-Update your test projects .csproj or add a reference to the project in Visual Studio 2017
+Update your project:
 
-0. Include your testrunner of choice 
+0. Include SpecFlow and your test framework of choice:
 
   * [xUnit](https://github.com/xunit/dotnet-test-xunit):
-  Reference to the xunit package is used to identify xunit as the testrunner
-
     ```xml
     <ItemGroup>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.0.0-preview-20170106-08" />
-    <PackageReference Include="xunit.runner.visualstudio" Version="2.2.0-beta5-build1225" />
-    <PackageReference Include="SpecFlow" Version="2.1.0" />
-    <PackageReference Include="xunit" Version="2.2.0-beta5-build3474" />
+      <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.0.0-preview-20170106-08" />
+      <PackageReference Include="SpecFlow" Version="2.1.0" />
+      <PackageReference Include="xunit" Version="2.2.0-beta5-build3474" />
+      <PackageReference Include="xunit.runner.visualstudio" Version="2.2.0-beta5-build1225" />
     </ItemGroup>
     ```
 
-  * [NUnit 3](https://github.com/nunit/dotnet-test-nunit) _(Experimental)_:
-    eference to the NUnit package is used to identify nunit as the testrunner
+  * [NUnit](https://github.com/nunit/dotnet-test-nunit) _(Experimental)_:		
     ```xml
-     <ItemGroup>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.0.0-preview-20170106-08" />
-    <PackageReference Include="SpecFlow" Version="2.1.0" />
-    <PackageReference Include="NUnit" Version="3.4.1" />
-    <PackageReference Include="dotnet-test-nunit" Version="3.4.0-beta-2" />
+    <ItemGroup>
+      <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.0.0-preview-20170106-08" />
+      <PackageReference Include="SpecFlow" Version="2.1.0" />
+      <PackageReference Include="NUnit" Version="3.4.1" />
+     <PackageReference Include="dotnet-test-nunit" Version="3.4.0-beta-2" />
     </ItemGroup>
     ```
   
   * [MsTest](https://www.nuget.org/packages/dotnet-test-mstest/1.1.1-preview) _(Experimental)_:
-   Reference to the MSTest.TestFramework package is used to identify mstest as the testrunner
     ```xml
     <ItemGroup>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.0.0-preview-20170106-08" />
-    <PackageReference Include="MSTest.TestAdapter" Version="1.1.8-rc" />
-    <PackageReference Include="SpecFlow" Version="2.1.0" />
-    <PackageReference Include="MSTest.TestFramework" Version="1.0.8-rc" />
+      <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.0.0-preview-20170106-08" />
+      <PackageReference Include="SpecFlow" Version="2.1.0" />
+      <PackageReference Include="MSTest.TestFramework" Version="1.0.8-rc" />
+      <PackageReference Include="MSTest.TestAdapter" Version="1.1.8-rc" />
     </ItemGroup>
     ```
 
@@ -67,7 +60,12 @@ Update your test projects .csproj or add a reference to the project in Visual St
   </Target>
   ```
 
-0. Build for your tests to be discovered. **Note:** there is [a bug with the .NET Core CLI requiring a second build for newly added files to be discovered](https://github.com/stajs/SpecFlow.NetCore/issues/22).
+0. Build for your tests to be discovered. 
+
+### Notes
+
+- There is [a bug with the .NET Core CLI requiring a second build for newly added files to be discovered](https://github.com/stajs/SpecFlow.NetCore/issues/22).
+- Support for the .NET Core 1.0.0-rc4 tooling and `.csproj` was added by the community in February 2017 (thanks @richardjharding!) but has not yet been officially tested.
 
 ### Samples
 
@@ -84,7 +82,7 @@ If you build the [samples](https://github.com/stajs/SpecFlow.NetCore/tree/master
 ### Test frameworks
 
 - [xUnit](https://xunit.github.io/)
-- [NUnit 3](http://www.nunit.org/) - _Experimental support added by the community._
+- [NUnit](http://www.nunit.org/) - _Experimental support added by the community._
 - [MsTest](https://blogs.msdn.microsoft.com/visualstudioalm/2016/05/30/announcing-mstest-framework-support-for-net-core-rc2-asp-net-core-rc2/) - _Experimental support added by the community._
 
 ## Visual Studio
