@@ -12,55 +12,55 @@ Wait for the VS extension to support .NET Core projects. In the meantime, I pres
 
 Update your project:
 
-0. Include SpecFlow and your test framework of choice:
+1. Include SpecFlow and your test framework of choice:
 
-  * [xUnit](https://github.com/xunit/dotnet-test-xunit):
+    * [xUnit](https://github.com/xunit/dotnet-test-xunit):
+        ```xml
+        <ItemGroup>
+          <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.0.0-preview-20170106-08" />
+          <PackageReference Include="SpecFlow" Version="2.1.0" />
+          <PackageReference Include="xunit" Version="2.2.0-beta5-build3474" />
+          <PackageReference Include="xunit.runner.visualstudio" Version="2.2.0-beta5-build1225" />
+        </ItemGroup>
+        ```
+    
+    * [NUnit](https://github.com/nunit/dotnet-test-nunit) _(Experimental)_:
+        ```xml
+        <ItemGroup>
+          <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.0.0-preview-20170106-08" />
+          <PackageReference Include="SpecFlow" Version="2.1.0" />
+          <PackageReference Include="NUnit" Version="3.4.1" />
+         <PackageReference Include="dotnet-test-nunit" Version="3.4.0-beta-2" />
+        </ItemGroup>
+        ```
+    
+    * [MsTest](https://www.nuget.org/packages/dotnet-test-mstest/1.1.1-preview) _(Experimental)_:
+        ```xml
+        <ItemGroup>
+          <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.0.0-preview-20170106-08" />
+          <PackageReference Include="SpecFlow" Version="2.1.0" />
+          <PackageReference Include="MSTest.TestFramework" Version="1.0.8-rc" />
+          <PackageReference Include="MSTest.TestAdapter" Version="1.1.8-rc" />
+        </ItemGroup>
+        ```
+
+2. Include [`SpecFlow.NetCore`](https://www.nuget.org/packages/SpecFlow.NetCore):
+
     ```xml
     <ItemGroup>
-      <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.0.0-preview-20170106-08" />
-      <PackageReference Include="SpecFlow" Version="2.1.0" />
-      <PackageReference Include="xunit" Version="2.2.0-beta5-build3474" />
-      <PackageReference Include="xunit.runner.visualstudio" Version="2.2.0-beta5-build1225" />
+      <DotNetCliToolReference Include="SpecFlow.NetCore" Version="1.0.0-rc8" />
     </ItemGroup>
     ```
 
-  * [NUnit](https://github.com/nunit/dotnet-test-nunit) _(Experimental)_:		
+3. Add a `precompile` script:
+
     ```xml
-    <ItemGroup>
-      <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.0.0-preview-20170106-08" />
-      <PackageReference Include="SpecFlow" Version="2.1.0" />
-      <PackageReference Include="NUnit" Version="3.4.1" />
-     <PackageReference Include="dotnet-test-nunit" Version="3.4.0-beta-2" />
-    </ItemGroup>
-    ```
-  
-  * [MsTest](https://www.nuget.org/packages/dotnet-test-mstest/1.1.1-preview) _(Experimental)_:
-    ```xml
-    <ItemGroup>
-      <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.0.0-preview-20170106-08" />
-      <PackageReference Include="SpecFlow" Version="2.1.0" />
-      <PackageReference Include="MSTest.TestFramework" Version="1.0.8-rc" />
-      <PackageReference Include="MSTest.TestAdapter" Version="1.1.8-rc" />
-    </ItemGroup>
+    <Target Name="PrecompileScript" BeforeTargets="BeforeBuild">
+      <Exec Command="dotnet SpecFlow.NetCore" />
+    </Target>
     ```
 
-0. Include [`SpecFlow.NetCore`](https://www.nuget.org/packages/SpecFlow.NetCore):
-
-  ```xml
-  <ItemGroup>
-    <DotNetCliToolReference Include="SpecFlow.NetCore" Version="1.0.0-rc8" />
-  </ItemGroup>
-  ```
-
-0. Add a `precompile` script:
-
-  ```xml
-  <Target Name="PrecompileScript" BeforeTargets="BeforeBuild">
-    <Exec Command="dotnet SpecFlow.NetCore" />
-  </Target>
-  ```
-
-0. Build for your tests to be discovered. 
+4. Build for your tests to be discovered. 
 
 ### Notes
 
