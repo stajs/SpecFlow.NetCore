@@ -75,7 +75,7 @@ If you build the [samples](https://github.com/stajs/SpecFlow.NetCore/tree/master
 
 ### .NET Core
 
-- `netcoreapp1.0`
+- ~~`netcoreapp1.0`~~ (see [#39](https://github.com/stajs/SpecFlow.NetCore/issues/39))
 - `net46`
 - `net461`
 
