@@ -30,11 +30,15 @@ namespace SpecFlow.NetCore
 				if (File.Exists(path))
 					return path;
 
-				throw new Exception("Path to SpecFlow was supplied as an argument, but doesn't exist: " + path);
+				if (Path.IsPathRooted(path))
+				{
+					throw new Exception("Path to SpecFlow was supplied as an argument, but doesn't exist: " + path);
+				}
 			}
 
-			const string relativePathToSpecFlow = @"SpecFlow\2.1.0\tools\specflow.exe";
-
+			var relativePathToSpecFlow = string.IsNullOrWhiteSpace(path)
+				? @"SpecFlow\2.1.0\tools\specflow.exe"
+				: path;
 			var nugetPackagesPath = Environment.GetEnvironmentVariable("NUGET_PACKAGES");
 
 			if (!string.IsNullOrWhiteSpace(nugetPackagesPath))
