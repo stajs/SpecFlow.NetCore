@@ -17,30 +17,30 @@ Update your project:
     * [xUnit](https://github.com/xunit/dotnet-test-xunit):
         ```xml
         <ItemGroup>
-          <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.0.0-preview-20170106-08" />
+          <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.3.0" />
           <PackageReference Include="SpecFlow" Version="2.1.0" />
-          <PackageReference Include="xunit" Version="2.2.0-beta5-build3474" />
-          <PackageReference Include="xunit.runner.visualstudio" Version="2.2.0-beta5-build1225" />
+          <PackageReference Include="xunit.runner.visualstudio" Version="2.2.0" />
+          <PackageReference Include="xunit" Version="2.2.0" />
         </ItemGroup>
         ```
     
     * [NUnit](https://github.com/nunit/dotnet-test-nunit) _(Experimental)_:
         ```xml
         <ItemGroup>
-          <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.0.0-preview-20170106-08" />
+          <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.3.0" />
           <PackageReference Include="SpecFlow" Version="2.1.0" />
-          <PackageReference Include="NUnit" Version="3.4.1" />
-         <PackageReference Include="dotnet-test-nunit" Version="3.4.0-beta-2" />
+          <PackageReference Include="NUnit" Version="3.8.1" />
+          <PackageReference Include="dotnet-test-nunit" Version="3.4.0-beta-2" />
         </ItemGroup>
         ```
     
     * [MsTest](https://www.nuget.org/packages/dotnet-test-mstest/1.1.1-preview) _(Experimental)_:
         ```xml
         <ItemGroup>
-          <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.0.0-preview-20170106-08" />
+          <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.3.0" />
           <PackageReference Include="SpecFlow" Version="2.1.0" />
-          <PackageReference Include="MSTest.TestFramework" Version="1.0.8-rc" />
-          <PackageReference Include="MSTest.TestAdapter" Version="1.1.8-rc" />
+          <PackageReference Include="MSTest.TestAdapter" Version="1.1.18" />
+          <PackageReference Include="MSTest.TestFramework" Version="1.1.18" />
         </ItemGroup>
         ```
 
@@ -48,7 +48,7 @@ Update your project:
 
     ```xml
     <ItemGroup>
-      <DotNetCliToolReference Include="SpecFlow.NetCore" Version="1.0.0-rc8" />
+      <DotNetCliToolReference Include="SpecFlow.NetCore" Version="1.0.0-rc9" />
     </ItemGroup>
     ```
 
@@ -65,7 +65,7 @@ Update your project:
 ### Notes
 
 - There is [a bug with the .NET Core CLI requiring a second build for newly added files to be discovered](https://github.com/stajs/SpecFlow.NetCore/issues/22).
-- Support for the .NET Core 1.0.0-rc4 tooling and `.csproj` was added by the community in February 2017 (thanks @richardjharding!) but has not yet been officially tested.
+- Support for the .NET Core switch from `project.json` to MSBuild `.csproj` was added by the community in February 2017 (thanks @richardjharding!) but has not yet been officially tested.
 
 ### Samples
 
@@ -75,7 +75,7 @@ If you build the [samples](https://github.com/stajs/SpecFlow.NetCore/tree/master
 
 ### .NET Core
 
-- ~~`netcoreapp1.0`~~ (see [#39](https://github.com/stajs/SpecFlow.NetCore/issues/39))
+- ~~`netcoreapp2.0`~~ (see [#39](https://github.com/stajs/SpecFlow.NetCore/issues/39))
 - `net46`
 - `net461`
 
