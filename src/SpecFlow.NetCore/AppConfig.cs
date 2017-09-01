@@ -54,9 +54,7 @@ namespace SpecFlow.NetCore
 			// fixes SpecFlow Scenario Outline scenarios appearing under the project they belong to.
 			// see https://github.com/stajs/SpecFlow.NetCore/issues/34 and https://github.com/techtalk/SpecFlow/issues/275
 			if (testFramework.ToLower() == "mstest")
-			{
 				Content = Content.Replace("</specFlow>", "  <generator allowDebugGeneratedFiles=\"true\" />\r\n  </specFlow>");
-			}
 
 			WriteLine("Generating app.config");
 			WriteLine(Content);

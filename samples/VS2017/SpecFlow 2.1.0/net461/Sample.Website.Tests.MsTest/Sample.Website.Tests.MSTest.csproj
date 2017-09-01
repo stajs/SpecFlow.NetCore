@@ -20,10 +20,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.0.0-preview-20170106-08" />
-    <PackageReference Include="MSTest.TestAdapter" Version="1.1.8-rc" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.3.0" />
+    <PackageReference Include="MSTest.TestAdapter" Version="1.1.18" />
     <PackageReference Include="SpecFlow" Version="2.1.0" />
-    <PackageReference Include="MSTest.TestFramework" Version="1.0.8-rc" />
+    <PackageReference Include="MSTest.TestFramework" Version="1.1.18" />
   </ItemGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'net461' ">
@@ -36,7 +36,7 @@
   </Target>
 
   <ItemGroup>
-    <DotNetCliToolReference Include="SpecFlow.NetCore" Version="1.0.0-rc9-0006" />
+    <DotNetCliToolReference Include="SpecFlow.NetCore" Version="1.0.0-rc9-0010" />
   </ItemGroup>
 
 </Project>
