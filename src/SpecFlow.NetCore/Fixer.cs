@@ -91,7 +91,7 @@ namespace SpecFlow.NetCore
 
 		private void FixTests(DirectoryInfo directory)
 		{
-			WriteLine("Fixing SpecFlow generated files for xUnit 2");
+			WriteLine("Fixing SpecFlow generated files");
 
 			var glueFiles = directory.GetFiles("*.feature.cs", SearchOption.AllDirectories);
 

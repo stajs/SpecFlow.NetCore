@@ -1,3 +1,6 @@
+#NuGet for local development
+.local-nuget
+
 ## Ignore Specflow generated code
 *.feature.cs
 app.config

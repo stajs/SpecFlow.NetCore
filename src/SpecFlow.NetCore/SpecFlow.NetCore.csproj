@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <Description>Generate tests from SpecFlow feature files inside ASP.NET Core projects (.xproj's).</Description>
-    <VersionPrefix>1.0.0-rc9-00004</VersionPrefix>
+    <VersionPrefix>1.0.0-rc9-0006</VersionPrefix>
     <Authors>stajs</Authors>
     <TargetFrameworks>netcoreapp1.0;net46;net461</TargetFrameworks>
     <RuntimeIdentifiers>win7-x64;win7-x86;osx.10.10-x64;osx.10.11-x64;ubuntu.14.04-x64;ubuntu.16.04-x64;centos.7-x64;rhel.7.2-x64;debian.8-x64;fedora.23-x64;opensuse.13.2-x64</RuntimeIdentifiers>
@@ -20,7 +20,7 @@
     <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
     <GenerateAssemblyCopyrightAttribute>false</GenerateAssemblyCopyrightAttribute>
-    <PackageReleaseNotes>Updated to support 1.0.0-rc4 tooling and .csproj</PackageReleaseNotes>
+    <PackageReleaseNotes>Updated to support .NET Core 2.0</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>
@@ -37,5 +37,10 @@
     <Reference Include="System" />
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <!-- Ignore errors from the build event being triggered multiple times (per framework) and file locking the nuspec. First one wins. -->
+    <Exec Command="dotnet pack --no-build --output ../../.local-nuget" ContinueOnError="true" IgnoreExitCode="true" IgnoreStandardErrorWarningFormat="true" />
+  </Target>
 
 </Project>
