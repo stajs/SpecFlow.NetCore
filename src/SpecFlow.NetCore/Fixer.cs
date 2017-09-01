@@ -95,7 +95,7 @@ namespace SpecFlow.NetCore
 
 		private void FixTests(DirectoryInfo directory)
 		{
-			WriteLine("Fixing SpecFlow generated files for xUnit 2");
+			WriteLine("Fixing SpecFlow generated files");
 
 			var glueFiles = directory.GetFiles("*.feature.cs", SearchOption.AllDirectories);
 
@@ -108,6 +108,8 @@ namespace SpecFlow.NetCore
 					content = FixXunit(content);
 				else if (_testFramework.Equals("mstest", StringComparison.OrdinalIgnoreCase))
 					content = FixMsTest(content);
+				else
+					content = FixNunit(content);
 
 				File.WriteAllText(glueFile.FullName, content);
 			}
@@ -123,6 +125,13 @@ namespace SpecFlow.NetCore
 		{
 			content = content.Replace(" : Xunit.IUseFixture<", " : Xunit.IClassFixture<");
 			content = content.Replace("[Xunit.Extensions", "[Xunit");
+			return content;
+		}
+
+		private static string FixNunit(string content)
+		{
+			content = content.Replace("[NUnit.Framework.TestFixtureSetUpAttribute()]", "[NUnit.Framework.OneTimeSetUp()]");
+			content = content.Replace("[NUnit.Framework.TestFixtureTearDownAttribute()]", "[NUnit.Framework.OneTimeTearDown()]");
 			return content;
 		}
 

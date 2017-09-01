@@ -4,8 +4,8 @@
     <Description>Sample.Website.Tests Class Library</Description>
     <Authors>stajs</Authors>
     <TargetFramework>net461</TargetFramework>
-    <AssemblyName>Sample.Website.Tests.XUnit</AssemblyName>
-    <PackageId>Sample.Website.Tests.XUnit</PackageId>
+    <AssemblyName>Sample.Website.Tests.MSTest</AssemblyName>
+    <PackageId>Sample.Website.Tests.MSTest</PackageId>
     <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
     <GenerateAssemblyTitleAttribute>false</GenerateAssemblyTitleAttribute>
     <GenerateAssemblyDescriptionAttribute>false</GenerateAssemblyDescriptionAttribute>
@@ -20,10 +20,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.0.0-preview-20170106-08" />
-    <PackageReference Include="xunit.runner.visualstudio" Version="2.2.0-beta5-build1225" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.3.0" />
     <PackageReference Include="SpecFlow" Version="2.1.0" />
-    <PackageReference Include="xunit" Version="2.2.0-beta5-build3474" />
+    <PackageReference Include="MSTest.TestAdapter" Version="1.1.18" />
+    <PackageReference Include="MSTest.TestFramework" Version="1.1.18" />
   </ItemGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'net461' ">
@@ -36,7 +36,7 @@
   </Target>
 
   <ItemGroup>
-    <DotNetCliToolReference Include="SpecFlow.NetCore" Version="1.0.0-rc9-00004" />
+    <DotNetCliToolReference Include="SpecFlow.NetCore" Version="1.0.0-rc9-0010" />
   </ItemGroup>
 
 </Project>

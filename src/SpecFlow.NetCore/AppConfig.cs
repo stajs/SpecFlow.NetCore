@@ -3,8 +3,6 @@ using System.IO;
 using System.Linq;
 using System.Xml.Linq;
 using System.Xml.XPath;
-using Newtonsoft.Json;
-using Specflow.NetCore;
 using static System.Console;
 
 namespace SpecFlow.NetCore
@@ -44,7 +42,7 @@ namespace SpecFlow.NetCore
 		public static AppConfig CreateIn(DirectoryInfo directory, FileInfo csproj, string testFramework = null)
 		{
 			if (string.IsNullOrWhiteSpace(testFramework))
-				testFramework = GetProjectTestRunner(csproj);
+				testFramework = GetProjectTestRunner(csproj.FullName);
 
 			var config = new AppConfig(directory, testFramework);
 
@@ -56,9 +54,7 @@ namespace SpecFlow.NetCore
 			// fixes SpecFlow Scenario Outline scenarios appearing under the project they belong to.
 			// see https://github.com/stajs/SpecFlow.NetCore/issues/34 and https://github.com/techtalk/SpecFlow/issues/275
 			if (testFramework.ToLower() == "mstest")
-			{
 				Content = Content.Replace("</specFlow>", "  <generator allowDebugGeneratedFiles=\"true\" />\r\n  </specFlow>");
-			}
 
 			WriteLine("Generating app.config");
 			WriteLine(Content);
@@ -95,40 +91,39 @@ namespace SpecFlow.NetCore
 			if (string.IsNullOrWhiteSpace(testProvider))
 				throw new Exception("Couldn't find required SpecFlow element in app.config. Example:\n" + SpecFlowSection);
 
-			var projectJsonTestRunner = GetProjectTestRunner(csproj);
+			var projectTestRunner = GetProjectTestRunner(csproj.FullName);
 
-			if (string.IsNullOrWhiteSpace(projectJsonTestRunner))
-				return;
-
-			if (!TestFramework.Equals(projectJsonTestRunner, StringComparison.OrdinalIgnoreCase))
-				throw new Exception($"App.config test provider doesn't match the project.json test runner: {TestFramework} vs {projectJsonTestRunner}");
+			if (!TestFramework.Equals(projectTestRunner, StringComparison.OrdinalIgnoreCase))
+				throw new Exception($"App.config test provider doesn't match the csproj test runner: {TestFramework} vs {projectTestRunner}");
 		}
 
-		private static string GetProjectTestRunner(FileInfo csproj)
+		private static string GetProjectTestRunner(string csproj)
 		{			
-			XElement projectFile = XElement.Load(csproj.FullName);
-			var testRunner = string.Empty;
+			var project = XElement.Load(csproj);
+			var packageReferences = project
+				.Descendants("PackageReference")
+				.Select(e => e.Attribute("Include")?.Value)
+				.ToList();
 
-			if (projectFile.Descendants("PackageReference").Any(e => e.Attributes("Include").Any(a => a.Value == "xunit")))
+			if (packageReferences.Contains("xunit"))
 			{
-				WriteLine(String.Format("Found xunit test runner in project: ", csproj));
-				testRunner = "xunit";
-			}
-			if (projectFile.Descendants("PackageReference").Any(e => e.Attributes("Include").Any(a => a.Value == "MSTest.TestFramework")))
-			{
-				WriteLine(String.Format("Found mstest test runner in project: ", csproj));
-				testRunner = "mstest";
-			}
-			if (projectFile.Descendants("PackageReference").Any(e => e.Attributes("Include").Any(a => a.Value == "NUnit")))
-			{
-				WriteLine(String.Format("Found nunit test runner in project: ", csproj));
-				testRunner = "nunit";
+				WriteLine($"Found xunit in {csproj}");
+				return "xunit";
 			}
 
-			if (string.IsNullOrEmpty(testRunner))
-				throw new Exception(String.Format("{0} does not contain a test runner reference to mstest, xunit or nunit", csproj.FullName));
+			if (packageReferences.Contains("MSTest.TestFramework"))
+			{
+				WriteLine($"Found mstest in {csproj}");
+				return "mstest";
+			}
 
-			return testRunner;
+			if (packageReferences.Contains("NUnit"))
+			{
+				WriteLine($"Found nunit in {csproj}");
+				return "nunit";
+			}
+			
+			throw new Exception($"{csproj} does not contain a reference to mstest, xunit or nunit");
 		}
 	}
 }
