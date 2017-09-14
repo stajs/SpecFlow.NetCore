@@ -79,6 +79,8 @@ If you build the [samples](https://github.com/stajs/SpecFlow.NetCore/tree/master
 - `net46`
 - `net461`
 
+SpecFlow itself, and by extension this project, is currently limited to running on full .NET Framework.
+
 ### Test frameworks
 
 - [xUnit](https://xunit.github.io/)
