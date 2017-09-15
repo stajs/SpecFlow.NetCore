@@ -117,7 +117,7 @@ namespace SpecFlow.NetCore
 
 		private static string FixMsTest(string content)
 		{
-			content = Regex.Replace(content, ".*Microsoft.VisualStudio.TestTools.UnitTesting.Description.*", "");
+			content = Regex.Replace(content, @"\[Microsoft\.VisualStudio\.TestTools\.UnitTesting\.Description.*?\)]", "", RegexOptions.Singleline);
 			return content;
 		}
 
