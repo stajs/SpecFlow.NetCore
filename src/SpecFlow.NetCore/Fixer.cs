@@ -71,8 +71,14 @@ namespace SpecFlow.NetCore
 
 			var csproj = GetCsProj(directory);
 			var fakeCsproj = SaveFakeCsProj(directory, csproj);
-			GenerateSpecFlowGlue(directory, fakeCsproj, csproj);
-			DeleteFakeCsProj(fakeCsproj);
+			try
+			{
+				GenerateSpecFlowGlue(directory, fakeCsproj, csproj);
+			}
+			finally
+			{
+				DeleteFakeCsProj(fakeCsproj);
+			}
 			FixTests(directory);
 
 			if (missingGeneratedFiles.Any())
@@ -205,7 +211,7 @@ namespace SpecFlow.NetCore
 			var content = sb.ToString();
 			WriteLine(content);
 
-			var fakecsprojPath = csproj.FullName + ".fake.csproj";
+			var fakecsprojPath = csproj.FullName + ".fake";
 			WriteLine("Saving: " + fakecsprojPath);
 			File.WriteAllText(fakecsprojPath, content);
 
