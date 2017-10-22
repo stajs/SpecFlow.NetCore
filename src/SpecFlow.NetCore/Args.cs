@@ -10,10 +10,12 @@ namespace Specflow.NetCore
 		public const string SpecFlowPathArgName = "--specflow-path";
 		public const string WorkingDirectoryArgName = "--working-directory";
 		public const string TestFrameworkArgName = "--test-framework";
+		public const string ToolsVersionArgName = "--tools-version";
 
 		public string SpecFlowPath { get; }
 		public DirectoryInfo WorkingDirectory { get; }
 		public string TestFramework { get; }
+		public string ToolsVersion { get; }
 
 		public Args(string[] args)
 		{
@@ -53,6 +55,10 @@ namespace Specflow.NetCore
 
 					case TestFrameworkArgName:
 						TestFramework = value;
+						break;
+
+					case ToolsVersionArgName:
+						ToolsVersion = value;
 						break;
 
 					default:

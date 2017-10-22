@@ -10,7 +10,7 @@ namespace SpecFlow.NetCore
 			try
 			{
 				var a = new Args(args);
-				var fixer = new Fixer(a.SpecFlowPath, a.TestFramework);
+				var fixer = new Fixer(a.SpecFlowPath, a.TestFramework, a.ToolsVersion);
 				fixer.Fix(a.WorkingDirectory);
 
 				PrintUsingColor("SpecFlow fixed.", ConsoleColor.Green);
