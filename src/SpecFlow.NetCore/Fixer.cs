@@ -16,13 +16,13 @@ namespace SpecFlow.NetCore
 		private FileInfo[] _featureFiles;
 		private readonly string _toolsVersion;
 
-		public Fixer(string specFlowPath = null, string testFramework = null, string toolsVersion = null)
+		public Fixer(string specFlowPath = null, string testFramework = null, string toolsVersion = "14.0")
 		{
 			_specFlowExe = FindSpecFlow(specFlowPath);
 			WriteLine("Found: " + _specFlowExe);
 
 			_testFramework = testFramework;
-			_toolsVersion = toolsVersion ?? "14.0";
+			_toolsVersion = toolsVersion;
 		}
 
 		private string FindSpecFlow(string path)
