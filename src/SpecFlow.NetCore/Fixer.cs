@@ -14,13 +14,15 @@ namespace SpecFlow.NetCore
 		private readonly string _specFlowExe;
 		private string _testFramework;
 		private FileInfo[] _featureFiles;
+		private readonly string _toolsVersion;
 
-		public Fixer(string specFlowPath = null, string testFramework = null)
+		public Fixer(string specFlowPath = null, string testFramework = null, string toolsVersion = "14.0")
 		{
 			_specFlowExe = FindSpecFlow(specFlowPath);
 			WriteLine("Found: " + _specFlowExe);
 
 			_testFramework = testFramework;
+			_toolsVersion = toolsVersion;
 		}
 
 		private string FindSpecFlow(string path)
@@ -184,8 +186,8 @@ namespace SpecFlow.NetCore
 			var sb = new StringBuilder();
 
 			// Set the "ToolsVersion" to VS2013, see: https://github.com/techtalk/SpecFlow/issues/471
-			sb.Append(@"<?xml version=""1.0"" encoding=""utf-8""?>
-<Project ToolsVersion=""14.0"" DefaultTargets=""Build"" xmlns=""http://schemas.microsoft.com/developer/msbuild/2003"">
+			sb.Append($@"<?xml version=""1.0"" encoding=""utf-8""?>
+<Project ToolsVersion=""{_toolsVersion}"" DefaultTargets=""Build"" xmlns=""http://schemas.microsoft.com/developer/msbuild/2003"">
 	<PropertyGroup>
 		<RootNamespace>SpecFlow.GeneratedTests</RootNamespace>
 		<AssemblyName>SpecFlow.GeneratedTests</AssemblyName>
