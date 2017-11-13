@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Xml;
 using Specflow.NetCore;
 using static System.Console;
 
@@ -11,36 +12,23 @@ namespace SpecFlow.NetCore
 {
 	internal class Fixer
 	{
-		private readonly string _specFlowExe;
+		private string _specFlowExe;
 		private string _testFramework;
 		private FileInfo[] _featureFiles;
 		private readonly string _toolsVersion;
 
 		public Fixer(string specFlowPath = null, string testFramework = null, string toolsVersion = "14.0")
 		{
-			_specFlowExe = FindSpecFlow(specFlowPath);
-			WriteLine("Found: " + _specFlowExe);
-
+			_specFlowExe = specFlowPath;
 			_testFramework = testFramework;
 			_toolsVersion = toolsVersion;
 		}
 
-		private string FindSpecFlow(string path)
+		private static string FindSpecFlow(string version)
 		{
-			if (!string.IsNullOrWhiteSpace(path))
-			{
-				if (File.Exists(path))
-					return path;
+			string path;
+			var relativePathToSpecFlow = string.Format(@"SpecFlow\{0}\tools\specflow.exe", version);
 
-				if (Path.IsPathRooted(path))
-				{
-					throw new Exception("Path to SpecFlow was supplied as an argument, but doesn't exist: " + path);
-				}
-			}
-
-			var relativePathToSpecFlow = string.IsNullOrWhiteSpace(path)
-				? @"SpecFlow\2.1.0\tools\specflow.exe"
-				: path;
 			var nugetPackagesPath = Environment.GetEnvironmentVariable("NUGET_PACKAGES");
 
 			if (!string.IsNullOrWhiteSpace(nugetPackagesPath))
@@ -65,6 +53,22 @@ namespace SpecFlow.NetCore
 			throw new Exception($"Can't find SpecFlow: {path}\nTry specifying the path with {Args.SpecFlowPathArgName}.");
 		}
 
+		private static bool TryGetSpecFlowVersion(FileInfo csproj, out string version)
+		{
+			var doc = new XmlDocument();
+			doc.Load(csproj.FullName);
+
+			var root = doc.DocumentElement;
+			var node = root.SelectSingleNode("//ItemGroup/PackageReference[translate(@Include, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz')='specflow']"); // case-insensitive for XPath version 1.0
+			if (node == null)
+			{
+				version = default(string);
+				return false;
+			}
+			version = node.Attributes["Version"].Value;
+			return true;
+		}
+
 		public void Fix(DirectoryInfo directory)
 		{
 			WriteLine("Current directory: " + directory.FullName);
@@ -72,6 +76,9 @@ namespace SpecFlow.NetCore
 			var missingGeneratedFiles = _featureFiles.Where(f => !File.Exists(f.FullName + ".cs")).ToList();
 
 			var csproj = GetCsProj(directory);
+
+			EnsureSpecFlow(csproj);
+
 			var fakeCsproj = SaveFakeCsProj(directory, csproj);
 			try
 			{
@@ -88,6 +95,28 @@ namespace SpecFlow.NetCore
 				missingGeneratedFiles.ForEach(WarnNotExists);
 				WriteLine("Rebuild to make the above files discoverable, see https://github.com/stajs/SpecFlow.NetCore/issues/22.");
 			}
+		}
+
+		private void EnsureSpecFlow(FileInfo csproj)
+		{
+			if (string.IsNullOrWhiteSpace(_specFlowExe))
+			{
+				string specFlowVersion;
+				if (!TryGetSpecFlowVersion(csproj, out specFlowVersion))
+				{
+					throw new Exception("Could not get SpecFlow version from: " + csproj.FullName);
+				}
+
+				_specFlowExe = FindSpecFlow(specFlowVersion);
+				WriteLine("Found: " + _specFlowExe);
+				return;
+			}
+
+			if (File.Exists(_specFlowExe))
+			{
+				return;
+			}
+			throw new Exception("Path to SpecFlow was supplied as an argument, but doesn't exist: " + _specFlowExe);
 		}
 
 		private void WarnNotExists(FileInfo featureFile)
