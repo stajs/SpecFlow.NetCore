@@ -48,7 +48,7 @@ Update your project:
 
     ```xml
     <ItemGroup>
-      <DotNetCliToolReference Include="SpecFlow.NetCore" Version="1.0.0" />
+      <DotNetCliToolReference Include="SpecFlow.NetCore" Version="1.1.0" />
     </ItemGroup>
     ```
 
