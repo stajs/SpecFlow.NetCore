@@ -84,10 +84,5 @@ namespace Specflow.NetCore
 			WriteLine("WorkingDirectory: " + WorkingDirectory.FullName);
 			WriteLine("TestFramework: " + TestFramework);
 		}
-
-		private bool IsOdd(int i)
-		{
-			return i % 2 != 0;
-		}
 	}
 }
