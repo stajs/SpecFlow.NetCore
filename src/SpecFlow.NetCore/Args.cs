@@ -55,7 +55,7 @@ namespace Specflow.NetCore
 				}
 				else
 				{
-					argDictionary[lastKey] = string.IsNullOrEmpty(argDictionary[lastKey]) ? arg : argDictionary[lastKey] + arg;
+					argDictionary[lastKey] = string.IsNullOrEmpty(argDictionary[lastKey]) ? arg : argDictionary[lastKey] + " " + arg;
 				}
 			}
 
