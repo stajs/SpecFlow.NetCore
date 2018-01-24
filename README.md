@@ -52,7 +52,7 @@ Update your project:
     </ItemGroup>
     ```
 
-3. Add a `precompile` script:
+3. Add a precompile script:
 
     ```xml
     <Target Name="PrecompileScript" BeforeTargets="BeforeBuild">
@@ -60,32 +60,35 @@ Update your project:
     </Target>
     ```
 
-4. Build for your tests to be discovered. 
+4. Build for your tests to be discovered.
 
-### Notes
+   Note: there is [a bug with the .NET Core CLI requiring a second build for newly added files to be discovered](https://github.com/stajs/SpecFlow.NetCore/issues/22).
 
-- There is [a bug with the .NET Core CLI requiring a second build for newly added files to be discovered](https://github.com/stajs/SpecFlow.NetCore/issues/22).
-- Support for the .NET Core switch from `project.json` to MSBuild `.csproj` was added by the community in February 2017 (thanks @richardjharding!) but has not yet been officially tested.
+## .NET target frameworks
 
-### Samples
+:warning: **SpecFlow itself (and by extension this project) is currently limited to Windows platforms with full .NET Framework v4.5.1+**
 
-If you build the [samples](https://github.com/stajs/SpecFlow.NetCore/tree/master/samples/) solution, you should see `.feature.cs` files and an `app.config` being generated for each test framework.
+This means that the following are unsupported:
 
-## Supported frameworks
+- Non-Windows platforms.
+- [Target frameworks](https://docs.microsoft.com/en-us/dotnet/standard/frameworks) other than `.NET Framework`.
+- `.NET Framework` TFMs below `net451`.
 
-### .NET Core
+This project will not work with the `.NET Core Application` target framework (e.g. `netcoreapp2.0`). If you find it confusing that this project includes "NetCore" in the name, yet it only supports `.NET Framework` and not `.NET Core Application`, remember the above limitation of SpecFlow and that it is a legitimate usage of a [.NET Core package](https://docs.microsoft.com/en-us/dotnet/core/packages):
 
-- ~~`netcoreapp2.0`~~ (see [#39](https://github.com/stajs/SpecFlow.NetCore/issues/39))
+> .NET Core is a platform made of NuGet packages.
+>
+> Each of the .NET Core packages support being run on multiple .NET implementations, represented as frameworks. Some of those frameworks are traditional frameworks, like net46, representing the .NET Framework.
+
+The following TFMs are officially supported:
+
 - `net46`
 - `net461`
 
-SpecFlow itself, and by extension this project, is currently limited to running on full .NET Framework.
+Other TFMs of `net451` and above should support SpecFlow and this project, but have not been officially tested.
 
-### Test frameworks
 
-- [xUnit](https://xunit.github.io/)
-- [NUnit](http://www.nunit.org/) - _Experimental support added by the community._
-- [MsTest](https://blogs.msdn.microsoft.com/visualstudioalm/2016/05/30/announcing-mstest-framework-support-for-net-core-rc2-asp-net-core-rc2/) - _Experimental support added by the community._
+
 
 ## Visual Studio
 
@@ -116,6 +119,10 @@ One of the nice features from the VS extension is being able to easily generate 
 
 Given this should be a short-lived solution, hopefully this workaround is tolerable.
 -->
+
+## Samples
+
+If you build the [samples](https://github.com/stajs/SpecFlow.NetCore/tree/master/samples/) solution, you should see `.feature.cs` files and an `app.config` being generated for each test framework.
 
 ## Background
 
