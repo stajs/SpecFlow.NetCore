@@ -68,7 +68,7 @@ namespace Specflow.NetCore
 						break;
 
 					case WorkingDirectoryArgName:
-						var path = string.IsNullOrEmpty(argDictionary[key]) ? Directory.GetCurrentDirectory(). : argDictionary[key];
+						var path = string.IsNullOrEmpty(argDictionary[key]) ? Directory.GetCurrentDirectory() : argDictionary[key];
 						if (!Directory.Exists(path))
 						{
 							throw new Exception("Working directory doesn't exist: " + path);
