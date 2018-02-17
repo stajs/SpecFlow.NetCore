@@ -28,7 +28,7 @@ namespace SpecFlow.NetCore
 		private static string FindSpecFlow(string version)
 		{
 			string path;
-			var relativePathToSpecFlow = string.Format(@"SpecFlow\{0}\tools\specflow.exe", version);
+			var relativePathToSpecFlow = Path.Combine("SpecFlow", version, "tools", "specflow.exe");
 
 			var nugetPackagesPath = Environment.GetEnvironmentVariable("NUGET_PACKAGES");
 
@@ -41,10 +41,13 @@ namespace SpecFlow.NetCore
 
 				throw new FileNotFoundException("NUGET_PACKAGES environment variable found, but SpecFlow doesn't exist: " + path);
 			}
-
-			// For full .NET Framework, you can get the user profile with: Environment.GetFolderPath(Environment.SpecialFolder.UserProfile)
-			// This isn't available yet in .NET Core, so rely on the environment variable for now.
+			
 			var userProfile = Environment.GetEnvironmentVariable("USERPROFILE");
+
+			if (string.IsNullOrWhiteSpace(userProfile))
+			{
+				userProfile = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+			}
 
 			path = Path.Combine(userProfile, ".nuget", "packages", relativePathToSpecFlow);
 
