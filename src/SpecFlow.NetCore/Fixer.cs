@@ -28,7 +28,7 @@ namespace SpecFlow.NetCore
 		private static string FindSpecFlow(string version)
 		{
 			string path;
-			var relativePathToSpecFlow = Path.Combine("SpecFlow", version, "tools", "specflow.exe");
+			var relativePathToSpecFlow = Path.Combine("specflow", version, "tools", "specflow.exe");
 
 			var nugetPackagesPath = Environment.GetEnvironmentVariable("NUGET_PACKAGES");
 
