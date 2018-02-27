@@ -50,7 +50,7 @@ Update your project:
 
     ```xml
     <ItemGroup>
-      <DotNetCliToolReference Include="SpecFlow.NetCore" Version="1.2.0" />
+      <DotNetCliToolReference Include="SpecFlow.NetCore" Version="1.3.1" />
     </ItemGroup>
     ```
 
