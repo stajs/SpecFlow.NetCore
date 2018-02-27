@@ -1,3 +1,5 @@
+:warning: **SpecFlow itself (and by extension this project) is currently limited to Windows platforms with .NET Framework v4.5.1+**
+
 # SpecFlow.NetCore
 
 ## The problem
@@ -64,31 +66,20 @@ Update your project:
 
    Note: there is [a bug with the .NET Core CLI requiring a second build for newly added files to be discovered](https://github.com/stajs/SpecFlow.NetCore/issues/22).
 
-## .NET target frameworks
+## .NET Core &amp; target frameworks
 
-:warning: **SpecFlow itself (and by extension this project) is currently limited to Windows platforms with full .NET Framework v4.5.1+**
+SpecFlow itself is currently limited to Windows platforms with full .NET Framework v4.5.1+. This means that two of the most common [target frameworks](https://docs.microsoft.com/en-us/dotnet/standard/frameworks) are unsupported:
 
-This means that the following are unsupported:
+- ~~`.NET Standard`~~ (unsupported)
+- ~~`.NET Core Application`~~ (unsupported)
+- `.NET Framework`
 
-- Non-Windows platforms.
-- [Target frameworks](https://docs.microsoft.com/en-us/dotnet/standard/frameworks) other than `.NET Framework`.
-- `.NET Framework` TFMs below `net451`.
-
-This project will not work with the `.NET Core Application` target framework (e.g. `netcoreapp2.0`). If you find it confusing that this project includes "NetCore" in the name, yet it only supports `.NET Framework` and not `.NET Core Application`, remember the above limitation of SpecFlow and that it is a legitimate usage of a [.NET Core package](https://docs.microsoft.com/en-us/dotnet/core/packages):
-
-> .NET Core is a platform made of NuGet packages.
->
-> Each of the .NET Core packages support being run on multiple .NET implementations, represented as frameworks. Some of those frameworks are traditional frameworks, like net46, representing the .NET Framework.
-
-The following TFMs are officially supported:
+For `.NET Framework`, the following Target Framework Monikers (TFMs) are officially supported:
 
 - `net46`
 - `net461`
 
-Other TFMs of `net451` and above should support SpecFlow and this project, but have not been officially tested.
-
-
-
+TFMs of `net451` and above should support SpecFlow and this project, but have not been officially tested.
 
 ## Visual Studio
 

@@ -22,25 +22,21 @@ namespace Specflow.NetCore
 		{
 			WorkingDirectory = new DirectoryInfo(Directory.GetCurrentDirectory());
 
-			// Command line arguments are required.  If absent, exit.
 			if (args == null || !args.Any())
-			{
 				return;
-			}
 
 			// establish a dictionary of all good command line variables
-			var argDictionary = new Dictionary<string, string>()
+			var argDictionary = new Dictionary<string, string>
 			{
- 				{SpecFlowPathArgName , null},
- 				{WorkingDirectoryArgName, null },
- 				{TestFrameworkArgName, null },
- 				{ToolsVersionArgName, null }
+ 				{ SpecFlowPathArgName, null },
+ 				{ WorkingDirectoryArgName, null },
+ 				{ TestFrameworkArgName, null },
+ 				{ ToolsVersionArgName, null }
  			};
 
-
 			string lastKey = null;
-			// loop through all arguments, attempting to detect and fix bad values
-			foreach(string arg in args)
+
+			foreach (var arg in args)
 			{
 				if (argDictionary.ContainsKey(arg))
 				{
@@ -70,9 +66,7 @@ namespace Specflow.NetCore
 					case WorkingDirectoryArgName:
 						var path = string.IsNullOrEmpty(argDictionary[key]) ? Directory.GetCurrentDirectory() : argDictionary[key];
 						if (!Directory.Exists(path))
-						{
 							throw new Exception("Working directory doesn't exist: " + path);
-						}
 						WorkingDirectory = new DirectoryInfo(path);
 						break;
 

@@ -1,4 +1,4 @@
-﻿using Specflow.NetCore;
+using Specflow.NetCore;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -29,7 +29,6 @@ namespace SpecFlow.NetCore
 		{
 			string path;
 			var relativePathToSpecFlow = Path.Combine("specflow", version, "tools", "specflow.exe");
-
 			var nugetPackagesPath = Environment.GetEnvironmentVariable("NUGET_PACKAGES");
 
 			if (!string.IsNullOrWhiteSpace(nugetPackagesPath))
