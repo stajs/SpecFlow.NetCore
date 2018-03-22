@@ -65,11 +65,32 @@ namespace SpecFlow.NetCore
 			var node = root.SelectSingleNode("//ItemGroup/PackageReference[translate(@Include, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz')='specflow']"); // case-insensitive for XPath version 1.0
 			if (node == null)
 			{
+				if (TryGetSpecflowVersionFromImports(csproj, root, out version))
+					return true;
+				
 				version = default(string);
 				return false;
 			}
 			version = node.Attributes["Version"].Value;
 			return true;
+		}
+
+		private static bool TryGetSpecflowVersionFromImports(FileInfo csproj, XmlElement root, out string version)
+		{
+			var importNodes = root.SelectNodes("//Import");
+			foreach (XmlNode import in importNodes)
+			{
+				var relativePath = import.Attributes["Project"].Value;
+				var fullPath = Path.Combine(csproj.DirectoryName, relativePath);
+				if (!File.Exists(fullPath))
+					continue;
+				var importInfo = new FileInfo(fullPath);
+				if (TryGetSpecFlowVersion(importInfo, out version))
+					return true;
+			}
+
+			version = default(string);
+			return false;
 		}
 
 		public IEnumerable<FileInfo> GetFeatureFromLinks(FileInfo csproj)
@@ -126,8 +147,7 @@ namespace SpecFlow.NetCore
 		{
 			if (string.IsNullOrWhiteSpace(_specFlowExe))
 			{
-				string specFlowVersion;
-				if (!TryGetSpecFlowVersion(csproj, out specFlowVersion))
+				if (!TryGetSpecFlowVersion(csproj, out string specFlowVersion))
 				{
 					throw new XmlException("Could not get SpecFlow version from: " + csproj.FullName);
 				}

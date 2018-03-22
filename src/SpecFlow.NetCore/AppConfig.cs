@@ -1,9 +1,11 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Xml.Linq;
 using System.Xml.XPath;
 using static System.Console;
+using IOPath = System.IO.Path;
 
 namespace SpecFlow.NetCore
 {
@@ -99,11 +101,7 @@ namespace SpecFlow.NetCore
 
 		private static string GetProjectTestRunner(string csproj)
 		{			
-			var project = XElement.Load(csproj);
-			var packageReferences = project
-				.Descendants("PackageReference")
-				.Select(e => e.Attribute("Include")?.Value)
-				.ToList();
+			var packageReferences = GetProjectPackageReferences(csproj).ToList();
 
 			if (packageReferences.Contains("xunit"))
 			{
@@ -125,5 +123,26 @@ namespace SpecFlow.NetCore
 			
 			throw new Exception($"{csproj} does not contain a reference to mstest, xunit or nunit");
 		}
+
+		private static IEnumerable<string> GetProjectPackageReferences(string csproj)
+		{
+			var project = XElement.Load(csproj);
+			var packageReferences = project
+				.Descendants("PackageReference")
+				.Select(e => e.Attribute("Include")?.Value);
+
+			var csprojdirectory = IOPath.GetDirectoryName(csproj);
+			var imports = project
+				.Descendants("Import")
+				.Select(e => IOPath.Combine(csprojdirectory, e.Attribute("Project").Value));
+
+			foreach (var import in imports)
+			{
+				packageReferences = packageReferences.Concat(GetProjectPackageReferences(import));
+			}
+
+			return packageReferences;
+		}
+
 	}
 }
