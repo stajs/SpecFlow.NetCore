@@ -20,7 +20,7 @@
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
     <GenerateAssemblyCopyrightAttribute>false</GenerateAssemblyCopyrightAttribute>
     <PackageReleaseNotes></PackageReleaseNotes>
-    <Version>1.3.1</Version>
+    <Version>1.3.2</Version>
   </PropertyGroup>
 
   <ItemGroup>
