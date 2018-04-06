@@ -66,6 +66,30 @@ Update your project:
 
    Note: there is [a bug with the .NET Core CLI requiring a second build for newly added files to be discovered](https://github.com/stajs/SpecFlow.NetCore/issues/22).
 
+## Cross platform using Mono
+
+This has been tested on Windows, Ubuntu and macOS (High Sierra). It works in exactly the same way except it doesn’t use DotNetCli because it doesn’t work cross platform. Instead we call dotnet-SpecFlow.NetCore.exe directly from the package, this is why we need an extra PackageReference to SpecFlow.NetCore. 
+
+**You also need to reference SpecFlow 2.2 or higher due to a [Mono specific bug in SpecFlow](https://github.com/techtalk/SpecFlow/issues/701).**   
+  
+  ```xml
+  <PropertyGroup>
+        <SpecFlowNetCoreVersion>1.3.2</SpecFlowNetCoreVersion>
+  </PropertyGroup>
+    
+  <ItemGroup>
+     <PackageReference Include="SpecFlow.NetCore" Version="$(SpecFlowNetCoreVersion)" />
+     
+     <PackageReference Include="SpecFlow" Version="2.2.0" />
+     <PackageReference Include="xunit.runner.visualstudio" Version="2.2.0" />
+     <PackageReference Include="xunit" Version="2.2.0" />
+  </ItemGroup>
+
+  <Target Name="PrecompileScript" BeforeTargets="BeforeBuild">
+    <Exec Command="$(NuGetPackageRoot)specflow.netcore/$(SpecFlowNetCoreVersion)/lib/$(TargetFramework)/dotnet-SpecFlow.NetCore.exe" />
+  </Target>
+  ```
+
 ## .NET Core &amp; target frameworks
 
 SpecFlow itself is currently limited to Windows platforms with full .NET Framework v4.5.1+. This means that two of the most common [target frameworks](https://docs.microsoft.com/en-us/dotnet/standard/frameworks) are unsupported:
