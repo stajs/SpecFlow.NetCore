@@ -1,4 +1,4 @@
-:warning: **SpecFlow itself (and by extension this project) is currently limited to Windows platforms with .NET Framework v4.5.1+**
+:warning: **SpecFlow itself (and by extension this project) is currently limited to Windows platforms with .NET Framework v4.5.1+, or non-Windows with Mono.**
 
 # SpecFlow.NetCore
 
