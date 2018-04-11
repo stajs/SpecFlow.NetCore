@@ -86,7 +86,7 @@ This has been tested on Windows, Ubuntu and macOS (High Sierra). It works in exa
   </ItemGroup>
 
   <Target Name="PrecompileScript" BeforeTargets="BeforeBuild">
-    <Exec Command="$(NuGetPackageRoot)specflow.netcore/$(SpecFlowNetCoreVersion)/lib/$(TargetFramework)/dotnet-SpecFlow.NetCore.exe" />
+    <Exec Command="mono $(NuGetPackageRoot)specflow.netcore/$(SpecFlowNetCoreVersion)/lib/$(TargetFramework)/dotnet-SpecFlow.NetCore.exe" />
   </Target>
   ```
 
