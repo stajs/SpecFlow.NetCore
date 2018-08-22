@@ -221,14 +221,16 @@ namespace SpecFlow.NetCore
 		private void RunSpecFlow(string csproj)
 		{
 			// Credit: http://www.marcusoft.net/2010/12/specflowexe-and-mstest.html
-			var arguments = "generateall";
+			var arguments = "generateall ";
 			// Version 2.4.0 and higher require the -p parameter
 			// Version 2.3.2 and below cannot work with the -p parameter so we can't add
 			var projectParameterVersion = Version.Parse("2.4.0");
 			var localSpecFlowVersion = Version.Parse(_specFlowVersion);
 			if (localSpecFlowVersion >= projectParameterVersion)
-				arguments += " -p";
-			arguments += $@" ""{csproj}"" /force /verbose";
+				arguments += $@"-p ""{csproj}"" --force --verbose";
+			else
+				arguments += $@"""{csproj}"" /force /verbose";
+
 			WriteLine($"Calling: {_specFlowExe} {arguments}");
 
 			var p = new Process
