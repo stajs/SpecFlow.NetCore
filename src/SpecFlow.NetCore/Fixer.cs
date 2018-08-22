@@ -1,44 +1,34 @@
-﻿using System;
+using Specflow.NetCore;
+using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
-using Specflow.NetCore;
+using System.Xml;
 using static System.Console;
 
 namespace SpecFlow.NetCore
 {
 	internal class Fixer
 	{
-		private readonly string _specFlowExe;
+		private string _specFlowExe;
 		private string _testFramework;
 		private FileInfo[] _featureFiles;
+		private readonly string _toolsVersion;
 
-		public Fixer(string specFlowPath = null, string testFramework = null)
+		public Fixer(string specFlowPath = null, string testFramework = null, string toolsVersion = "14.0")
 		{
-			_specFlowExe = FindSpecFlow(specFlowPath);
-			WriteLine("Found: " + _specFlowExe);
-
+			_specFlowExe = specFlowPath;
 			_testFramework = testFramework;
+			_toolsVersion = toolsVersion;
 		}
 
-		private string FindSpecFlow(string path)
+		private static string FindSpecFlow(string version)
 		{
-			if (!string.IsNullOrWhiteSpace(path))
-			{
-				if (File.Exists(path))
-					return path;
-
-				if (Path.IsPathRooted(path))
-				{
-					throw new Exception("Path to SpecFlow was supplied as an argument, but doesn't exist: " + path);
-				}
-			}
-
-			var relativePathToSpecFlow = string.IsNullOrWhiteSpace(path)
-				? @"SpecFlow\2.1.0\tools\specflow.exe"
-				: path;
+			string path;
+			var relativePathToSpecFlow = Path.Combine("specflow", version, "tools", "specflow.exe");
 			var nugetPackagesPath = Environment.GetEnvironmentVariable("NUGET_PACKAGES");
 
 			if (!string.IsNullOrWhiteSpace(nugetPackagesPath))
@@ -48,31 +38,102 @@ namespace SpecFlow.NetCore
 				if (File.Exists(path))
 					return path;
 
-				throw new Exception("NUGET_PACKAGES environment variable found, but SpecFlow doesn't exist: " + path);
+				throw new FileNotFoundException("NUGET_PACKAGES environment variable found, but SpecFlow doesn't exist: " + path);
 			}
-
-			// For full .NET Framework, you can get the user profile with: Environment.GetFolderPath(Environment.SpecialFolder.UserProfile)
-			// This isn't available yet in .NET Core, so rely on the environment variable for now.
+			
 			var userProfile = Environment.GetEnvironmentVariable("USERPROFILE");
+
+			if (string.IsNullOrWhiteSpace(userProfile))
+			{
+				userProfile = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+			}
 
 			path = Path.Combine(userProfile, ".nuget", "packages", relativePathToSpecFlow);
 
 			if (File.Exists(path))
 				return path;
 
-			throw new Exception($"Can't find SpecFlow: {path}\nTry specifying the path with {Args.SpecFlowPathArgName}.");
+			throw new FileNotFoundException($"Can't find SpecFlow: {path}\nTry specifying the path with {Args.SpecFlowPathArgName}.");
+		}
+
+		private static bool TryGetSpecFlowVersion(FileInfo csproj, out string version)
+		{
+			var doc = new XmlDocument();
+			doc.Load(csproj.FullName);
+
+			var root = doc.DocumentElement;
+			var node = root.SelectSingleNode("//ItemGroup/PackageReference[translate(@Include, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz')='specflow']"); // case-insensitive for XPath version 1.0
+			if (node == null)
+			{
+				if (TryGetSpecflowVersionFromImports(csproj, root, out version))
+					return true;
+				
+				version = default(string);
+				return false;
+			}
+			version = node.Attributes["Version"].Value;
+			return true;
+		}
+
+		private static bool TryGetSpecflowVersionFromImports(FileInfo csproj, XmlElement root, out string version)
+		{
+			var importNodes = root.SelectNodes("//Import");
+			foreach (XmlNode import in importNodes)
+			{
+				var relativePath = import.Attributes["Project"].Value;
+				var fullPath = Path.Combine(csproj.DirectoryName, relativePath);
+				if (!File.Exists(fullPath))
+					continue;
+				var importInfo = new FileInfo(fullPath);
+				if (TryGetSpecFlowVersion(importInfo, out version))
+					return true;
+			}
+
+			version = default(string);
+			return false;
+		}
+
+		public IEnumerable<FileInfo> GetFeatureFromLinks(FileInfo csproj)
+		{
+			var doc = new XmlDocument();
+			doc.Load(csproj.FullName);
+
+			var nodes = doc.DocumentElement.SelectNodes("//ItemGroup/*[string(@Include) and string(@Link)]");
+
+			foreach (XmlNode node in nodes)
+			{
+				var include = node.Attributes["Include"].Value;
+
+				if (File.Exists(include) && Path.GetExtension(include).Equals(".feature", StringComparison.OrdinalIgnoreCase))
+				{
+					yield return new FileInfo(include);
+				}
+			}
 		}
 
 		public void Fix(DirectoryInfo directory)
 		{
 			WriteLine("Current directory: " + directory.FullName);
-			_featureFiles = directory.GetFiles("*.feature", SearchOption.AllDirectories);
-			var missingGeneratedFiles = _featureFiles.Where(f => !File.Exists(f.FullName + ".cs")).ToList();
 
 			var csproj = GetCsProj(directory);
+
+			_featureFiles = directory.GetFiles("*.feature", SearchOption.AllDirectories)
+				.Concat(GetFeatureFromLinks(csproj))
+				.ToArray();
+
+			var missingGeneratedFiles = _featureFiles.Where(f => !File.Exists(f.FullName + ".cs")).ToList();
+
+			EnsureSpecFlow(csproj);
+
 			var fakeCsproj = SaveFakeCsProj(directory, csproj);
-			GenerateSpecFlowGlue(directory, fakeCsproj, csproj);
-			DeleteFakeCsProj(fakeCsproj);
+			try
+			{
+				GenerateSpecFlowGlue(directory, fakeCsproj, csproj);
+			}
+			finally
+			{
+				DeleteFakeCsProj(fakeCsproj);
+			}
 			FixTests(directory);
 
 			if (missingGeneratedFiles.Any())
@@ -82,9 +143,30 @@ namespace SpecFlow.NetCore
 			}
 		}
 
+		private void EnsureSpecFlow(FileInfo csproj)
+		{
+			if (string.IsNullOrWhiteSpace(_specFlowExe))
+			{
+				if (!TryGetSpecFlowVersion(csproj, out string specFlowVersion))
+				{
+					throw new XmlException("Could not get SpecFlow version from: " + csproj.FullName);
+				}
+
+				_specFlowExe = FindSpecFlow(specFlowVersion);
+				WriteLine("Found: " + _specFlowExe);
+				return;
+			}
+
+			if (File.Exists(_specFlowExe))
+			{
+				return;
+			}
+			throw new FileNotFoundException("Path to SpecFlow was supplied as an argument, but doesn't exist: " + _specFlowExe);
+		}
+
 		private void WarnNotExists(FileInfo featureFile)
 		{
-			WriteLine($@"New file generated: {featureFile.FullName}.cs. No tests in {featureFile.Name} will be discovered by 'dotnet test'");
+			WriteLine($"New file generated: {featureFile.FullName}.cs. No tests in {featureFile.Name} will be discovered by 'dotnet test'");
 		}
 
 		private void DeleteFakeCsProj(FileInfo fakeCsproj)
@@ -178,8 +260,8 @@ namespace SpecFlow.NetCore
 			var sb = new StringBuilder();
 
 			// Set the "ToolsVersion" to VS2013, see: https://github.com/techtalk/SpecFlow/issues/471
-			sb.Append(@"<?xml version=""1.0"" encoding=""utf-8""?>
-<Project ToolsVersion=""14.0"" DefaultTargets=""Build"" xmlns=""http://schemas.microsoft.com/developer/msbuild/2003"">
+			sb.Append($@"<?xml version=""1.0"" encoding=""utf-8""?>
+<Project ToolsVersion=""{_toolsVersion}"" DefaultTargets=""Build"" xmlns=""http://schemas.microsoft.com/developer/msbuild/2003"">
 	<PropertyGroup>
 		<RootNamespace>SpecFlow.GeneratedTests</RootNamespace>
 		<AssemblyName>SpecFlow.GeneratedTests</AssemblyName>
@@ -194,7 +276,7 @@ namespace SpecFlow.NetCore
 				sb.Append($@"
 		<None Include=""{featureFile.FullName.Replace(directory.FullName + Path.DirectorySeparatorChar, "")}"">
 			<Generator>SpecFlowSingleFileGenerator</Generator>
-			<LastGenOutput>{featureFile.Name}.cs</LastGenOutput>
+			<LastGenOutput>{featureFile.FullName}.cs</LastGenOutput>
 		</None>");
 			}
 
@@ -205,7 +287,7 @@ namespace SpecFlow.NetCore
 			var content = sb.ToString();
 			WriteLine(content);
 
-			var fakecsprojPath = csproj.FullName + ".fake.csproj";
+			var fakecsprojPath = csproj.FullName + ".fake";
 			WriteLine("Saving: " + fakecsprojPath);
 			File.WriteAllText(fakecsprojPath, content);
 
@@ -217,7 +299,7 @@ namespace SpecFlow.NetCore
 			var csprojs = directory.GetFiles("*.csproj", SearchOption.TopDirectoryOnly);
 
 			if (csprojs.Length == 0)
-				throw new Exception("Could not find '.csproj'.");
+				throw new FileNotFoundException("Could not find '.csproj'.");
 
 			if (csprojs.Length > 1)
 				throw new Exception("More than one '.csproj' found.");

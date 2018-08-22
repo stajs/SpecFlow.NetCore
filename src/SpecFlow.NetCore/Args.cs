@@ -1,4 +1,5 @@
-﻿using System;
+using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using static System.Console;
@@ -10,10 +11,12 @@ namespace Specflow.NetCore
 		public const string SpecFlowPathArgName = "--specflow-path";
 		public const string WorkingDirectoryArgName = "--working-directory";
 		public const string TestFrameworkArgName = "--test-framework";
+		public const string ToolsVersionArgName = "--tools-version";
 
 		public string SpecFlowPath { get; }
 		public DirectoryInfo WorkingDirectory { get; }
 		public string TestFramework { get; }
+		public string ToolsVersion { get; }
 
 		public Args(string[] args)
 		{
@@ -22,52 +25,65 @@ namespace Specflow.NetCore
 			if (args == null || !args.Any())
 				return;
 
-			// Very basic arg parsing:
-			//   - Assume odd elements are arg names.
-			//   - Assume even elements are arg values.
-			//   - Paths with spaces will probably blow up.
-			//   - Duplicates, last one wins.
-
-			for (var i = 0; i < args.Length; i++)
+			// establish a dictionary of all good command line variables
+			var argDictionary = new Dictionary<string, string>
 			{
-				if (IsOdd(i))
-					continue;
+ 				{ SpecFlowPathArgName, null },
+ 				{ WorkingDirectoryArgName, null },
+ 				{ TestFrameworkArgName, null },
+ 				{ ToolsVersionArgName, null }
+ 			};
 
-				if (i + 1 >= args.Length)
-					throw new Exception("Uneven arguments");
+			string lastKey = null;
 
-				var name = args[i];
-				var value = args[i + 1];
+			foreach (var arg in args)
+			{
+				if (argDictionary.ContainsKey(arg))
+				{
+					lastKey = arg;
+				}
+				else if (arg.StartsWith("--") || string.IsNullOrEmpty(lastKey))
+				{
+					// We are making the assumption that anything starting with -- is intentionally an argument key.
+					// If that argument key is not in the dictionary, we know it is a bad argument.
+					// Additionally, if the first argument key is not in our dictionary, the arguments are bad.
+					throw new Exception("Unknown argument: " + arg);
+				}
+				else
+				{
+					argDictionary[lastKey] = string.IsNullOrEmpty(argDictionary[lastKey]) ? arg : argDictionary[lastKey] + " " + arg;
+				}
+			}
 
-				switch (name)
+			foreach (var key in argDictionary.Keys)
+			{
+				switch (key)
 				{
 					case SpecFlowPathArgName:
-						SpecFlowPath = value;
+						SpecFlowPath = argDictionary[key];
 						break;
 
 					case WorkingDirectoryArgName:
-						if (!Directory.Exists(value))
-							throw new Exception("Working directory doesn't exist: " + value);
-						WorkingDirectory = new DirectoryInfo(value);
+						var path = string.IsNullOrEmpty(argDictionary[key]) ? Directory.GetCurrentDirectory() : argDictionary[key];
+						if (!Directory.Exists(path))
+							throw new Exception("Working directory doesn't exist: " + path);
+						WorkingDirectory = new DirectoryInfo(path);
 						break;
 
 					case TestFrameworkArgName:
-						TestFramework = value;
+						TestFramework = argDictionary[key];
 						break;
 
-					default:
-						throw new Exception("Unknown argument: " + name);
+					case ToolsVersionArgName:
+						ToolsVersion = argDictionary[key];
+						break;
 				}
 			}
 
 			WriteLine("SpecFlowPath: " + SpecFlowPath);
 			WriteLine("WorkingDirectory: " + WorkingDirectory.FullName);
 			WriteLine("TestFramework: " + TestFramework);
-		}
-
-		private bool IsOdd(int i)
-		{
-			return i % 2 != 0;
+			WriteLine("ToolsVersion: " + ToolsVersion);
 		}
 	}
 }

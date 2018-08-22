@@ -1,3 +1,5 @@
+:warning: **SpecFlow itself (and by extension this project) is currently limited to Windows platforms with .NET Framework v4.5.1+, or non-Windows with Mono.**
+
 # SpecFlow.NetCore
 
 ## The problem
@@ -48,11 +50,11 @@ Update your project:
 
     ```xml
     <ItemGroup>
-      <DotNetCliToolReference Include="SpecFlow.NetCore" Version="1.0.0-rc9" />
+      <DotNetCliToolReference Include="SpecFlow.NetCore" Version="1.3.2" />
     </ItemGroup>
     ```
 
-3. Add a `precompile` script:
+3. Add a precompile script:
 
     ```xml
     <Target Name="PrecompileScript" BeforeTargets="BeforeBuild">
@@ -60,32 +62,48 @@ Update your project:
     </Target>
     ```
 
-4. Build for your tests to be discovered. 
+4. Build for your tests to be discovered.
 
-### Notes
+   Note: there is [a bug with the .NET Core CLI requiring a second build for newly added files to be discovered](https://github.com/stajs/SpecFlow.NetCore/issues/22).
 
-- There is [a bug with the .NET Core CLI requiring a second build for newly added files to be discovered](https://github.com/stajs/SpecFlow.NetCore/issues/22).
-- Support for the .NET Core switch from `project.json` to MSBuild `.csproj` was added by the community in February 2017 (thanks @richardjharding!) but has not yet been officially tested.
+## Cross platform using Mono
 
-### Samples
+This has been tested on Windows, Ubuntu and macOS (High Sierra). It works in exactly the same way except it doesn’t use DotNetCli because it doesn’t work cross platform. Instead we call dotnet-SpecFlow.NetCore.exe directly from the package, this is why we need an extra PackageReference to SpecFlow.NetCore. 
 
-If you build the [samples](https://github.com/stajs/SpecFlow.NetCore/tree/master/samples/) solution, you should see `.feature.cs` files and an `app.config` being generated for each test framework.
+**You also need to reference SpecFlow 2.2 or higher due to a [Mono specific bug in SpecFlow](https://github.com/techtalk/SpecFlow/issues/701).**   
+  
+  ```xml
+  <PropertyGroup>
+        <SpecFlowNetCoreVersion>1.3.2</SpecFlowNetCoreVersion>
+  </PropertyGroup>
+    
+  <ItemGroup>
+     <PackageReference Include="SpecFlow.NetCore" Version="$(SpecFlowNetCoreVersion)" />
+     
+     <PackageReference Include="SpecFlow" Version="2.2.0" />
+     <PackageReference Include="xunit.runner.visualstudio" Version="2.2.0" />
+     <PackageReference Include="xunit" Version="2.2.0" />
+  </ItemGroup>
 
-## Supported frameworks
+  <Target Name="PrecompileScript" BeforeTargets="BeforeBuild">
+    <Exec Command="mono $(NuGetPackageRoot)specflow.netcore/$(SpecFlowNetCoreVersion)/lib/$(TargetFramework)/dotnet-SpecFlow.NetCore.exe" />
+  </Target>
+  ```
 
-### .NET Core
+## .NET Core &amp; target frameworks
 
-- ~~`netcoreapp2.0`~~ (see [#39](https://github.com/stajs/SpecFlow.NetCore/issues/39))
+SpecFlow itself is currently limited to Windows platforms with full .NET Framework v4.5.1+. This means that two of the most common [target frameworks](https://docs.microsoft.com/en-us/dotnet/standard/frameworks) are unsupported:
+
+- ~~`.NET Standard`~~ (unsupported)
+- ~~`.NET Core Application`~~ (unsupported)
+- `.NET Framework`
+
+For `.NET Framework`, the following Target Framework Monikers (TFMs) are officially supported:
+
 - `net46`
 - `net461`
 
-SpecFlow itself, and by extension this project, is currently limited to running on full .NET Framework.
-
-### Test frameworks
-
-- [xUnit](https://xunit.github.io/)
-- [NUnit](http://www.nunit.org/) - _Experimental support added by the community._
-- [MsTest](https://blogs.msdn.microsoft.com/visualstudioalm/2016/05/30/announcing-mstest-framework-support-for-net-core-rc2-asp-net-core-rc2/) - _Experimental support added by the community._
+TFMs of `net451` and above should support SpecFlow and this project, but have not been officially tested.
 
 ## Visual Studio
 
@@ -116,6 +134,10 @@ One of the nice features from the VS extension is being able to easily generate 
 
 Given this should be a short-lived solution, hopefully this workaround is tolerable.
 -->
+
+## Samples
+
+If you build the [samples](https://github.com/stajs/SpecFlow.NetCore/tree/master/samples/) solution, you should see `.feature.cs` files and an `app.config` being generated for each test framework.
 
 ## Background
 
