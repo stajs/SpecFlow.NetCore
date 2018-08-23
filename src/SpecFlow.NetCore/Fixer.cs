@@ -17,6 +17,7 @@ namespace SpecFlow.NetCore
 		private string _testFramework;
 		private FileInfo[] _featureFiles;
 		private readonly string _toolsVersion;
+		private string _specFlowVersion;
 
 		public Fixer(string specFlowPath = null, string testFramework = null, string toolsVersion = "14.0")
 		{
@@ -147,12 +148,12 @@ namespace SpecFlow.NetCore
 		{
 			if (string.IsNullOrWhiteSpace(_specFlowExe))
 			{
-				if (!TryGetSpecFlowVersion(csproj, out string specFlowVersion))
+				if (!TryGetSpecFlowVersion(csproj, out _specFlowVersion))
 				{
 					throw new XmlException("Could not get SpecFlow version from: " + csproj.FullName);
 				}
 
-				_specFlowExe = FindSpecFlow(specFlowVersion);
+				_specFlowExe = FindSpecFlow(_specFlowVersion);
 				WriteLine("Found: " + _specFlowExe);
 				return;
 			}
@@ -220,7 +221,16 @@ namespace SpecFlow.NetCore
 		private void RunSpecFlow(string csproj)
 		{
 			// Credit: http://www.marcusoft.net/2010/12/specflowexe-and-mstest.html
-			var arguments = $@"generateall ""{csproj}"" /force /verbose";
+			var arguments = "generateall ";
+			// Version 2.4.0 and higher require the -p parameter
+			// Version 2.3.2 and below cannot work with the -p parameter so we can't add
+			var projectParameterVersion = Version.Parse("2.4.0");
+			var localSpecFlowVersion = Version.Parse(_specFlowVersion);
+			if (localSpecFlowVersion >= projectParameterVersion)
+				arguments += $@"-p ""{csproj}"" --force --verbose";
+			else
+				arguments += $@"""{csproj}"" /force /verbose";
+
 			WriteLine($"Calling: {_specFlowExe} {arguments}");
 
 			var p = new Process
