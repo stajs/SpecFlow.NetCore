@@ -65,9 +65,11 @@ namespace Specflow.NetCore
 					case SpecFlowPathArgName:
 						SpecFlowPath = argDictionary[key];
 						break;
+
 					case SpecFlowVersionArgName:
 						SpecFlowVersion = argDictionary[key];
 						break;
+
 					case WorkingDirectoryArgName:
 						var path = string.IsNullOrEmpty(argDictionary[key]) ? Directory.GetCurrentDirectory() : argDictionary[key];
 						if (!Directory.Exists(path))
