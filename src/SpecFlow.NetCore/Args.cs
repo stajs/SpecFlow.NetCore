@@ -9,11 +9,14 @@ namespace Specflow.NetCore
 	internal class Args
 	{
 		public const string SpecFlowPathArgName = "--specflow-path";
+		public const string SpecFlowVersionArgName = "--specflow-version";
 		public const string WorkingDirectoryArgName = "--working-directory";
 		public const string TestFrameworkArgName = "--test-framework";
 		public const string ToolsVersionArgName = "--tools-version";
+		
 
 		public string SpecFlowPath { get; }
+		public string SpecFlowVersion { get; }
 		public DirectoryInfo WorkingDirectory { get; }
 		public string TestFramework { get; }
 		public string ToolsVersion { get; }
@@ -29,6 +32,7 @@ namespace Specflow.NetCore
 			var argDictionary = new Dictionary<string, string>
 			{
  				{ SpecFlowPathArgName, null },
+				{ SpecFlowVersionArgName, null },
  				{ WorkingDirectoryArgName, null },
  				{ TestFrameworkArgName, null },
  				{ ToolsVersionArgName, null }
@@ -62,7 +66,9 @@ namespace Specflow.NetCore
 					case SpecFlowPathArgName:
 						SpecFlowPath = argDictionary[key];
 						break;
-
+					case SpecFlowVersionArgName:
+						SpecFlowVersion = argDictionary[key];
+						break;
 					case WorkingDirectoryArgName:
 						var path = string.IsNullOrEmpty(argDictionary[key]) ? Directory.GetCurrentDirectory() : argDictionary[key];
 						if (!Directory.Exists(path))
@@ -81,6 +87,7 @@ namespace Specflow.NetCore
 			}
 
 			WriteLine("SpecFlowPath: " + SpecFlowPath);
+			WriteLine("SpecFlowVersion: " + SpecFlowVersion);
 			WriteLine("WorkingDirectory: " + WorkingDirectory.FullName);
 			WriteLine("TestFramework: " + TestFramework);
 			WriteLine("ToolsVersion: " + ToolsVersion);
