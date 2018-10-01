@@ -13,7 +13,6 @@ namespace Specflow.NetCore
 		public const string WorkingDirectoryArgName = "--working-directory";
 		public const string TestFrameworkArgName = "--test-framework";
 		public const string ToolsVersionArgName = "--tools-version";
-		
 
 		public string SpecFlowPath { get; }
 		public string SpecFlowVersion { get; }
