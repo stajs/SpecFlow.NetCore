@@ -46,9 +46,7 @@ namespace SpecFlow.NetCore
 			var userProfile = Environment.GetEnvironmentVariable("USERPROFILE");
 
 			if (string.IsNullOrWhiteSpace(userProfile))
-			{
 				userProfile = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
-			}
 
 			path = Path.Combine(userProfile, ".nuget", "packages", relativePathToSpecFlow);
 
@@ -64,29 +62,37 @@ namespace SpecFlow.NetCore
 			doc.Load(csproj.FullName);
 
 			var root = doc.DocumentElement;
-			var node = root.SelectSingleNode("//ItemGroup/PackageReference[translate(@Include, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz')='specflow']"); // case-insensitive for XPath version 1.0
+
+			// Case-insensitive for XPath version 1.0
+			var node = root.SelectSingleNode("//ItemGroup/PackageReference[translate(@Include, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz')='specflow']");
+
 			if (node == null)
 			{
-				if (TryGetSpecflowVersionFromImports(csproj, root, out version))
+				if (TryGetSpecFlowVersionFromImports(csproj, root, out version))
 					return true;
 				
 				version = default(string);
 				return false;
 			}
+
 			version = node.Attributes["Version"].Value;
 			return true;
 		}
 
-		private static bool TryGetSpecflowVersionFromImports(FileInfo csproj, XmlElement root, out string version)
+		private static bool TryGetSpecFlowVersionFromImports(FileInfo csproj, XmlElement root, out string version)
 		{
 			var importNodes = root.SelectNodes("//Import");
+
 			foreach (XmlNode import in importNodes)
 			{
 				var relativePath = import.Attributes["Project"].Value;
 				var fullPath = Path.Combine(csproj.DirectoryName, relativePath);
+
 				if (!File.Exists(fullPath))
 					continue;
+
 				var importInfo = new FileInfo(fullPath);
+
 				if (TryGetSpecFlowVersion(importInfo, out version))
 					return true;
 			}
@@ -107,9 +113,7 @@ namespace SpecFlow.NetCore
 				var include = node.Attributes["Include"].Value;
 
 				if (File.Exists(include) && Path.GetExtension(include).Equals(".feature", StringComparison.OrdinalIgnoreCase))
-				{
 					yield return new FileInfo(include);
-				}
 			}
 		}
 
@@ -128,6 +132,7 @@ namespace SpecFlow.NetCore
 			EnsureSpecFlow(csproj);
 
 			var fakeCsproj = SaveFakeCsProj(directory, csproj);
+
 			try
 			{
 				GenerateSpecFlowGlue(directory, fakeCsproj, csproj);
@@ -136,6 +141,7 @@ namespace SpecFlow.NetCore
 			{
 				DeleteFakeCsProj(fakeCsproj);
 			}
+
 			FixTests(directory);
 
 			if (missingGeneratedFiles.Any())
@@ -150,19 +156,17 @@ namespace SpecFlow.NetCore
 			if (string.IsNullOrWhiteSpace(_specFlowExe))
 			{
 				if (!TryGetSpecFlowVersion(csproj, out _specFlowVersion))
-				{
 					throw new XmlException("Could not get SpecFlow version from: " + csproj.FullName);
-				}
 
 				_specFlowExe = FindSpecFlow(_specFlowVersion);
 				WriteLine("Found: " + _specFlowExe);
+
 				return;
 			}
 
 			if (File.Exists(_specFlowExe))
-			{
 				return;
-			}
+
 			throw new FileNotFoundException("Path to SpecFlow was supplied as an argument, but doesn't exist: " + _specFlowExe);
 		}
 
@@ -209,6 +213,7 @@ namespace SpecFlow.NetCore
 		{
 			content = content.Replace(" : Xunit.IUseFixture<", " : Xunit.IClassFixture<");
 			content = content.Replace("[Xunit.Extensions", "[Xunit");
+
 			return content;
 		}
 
@@ -223,10 +228,12 @@ namespace SpecFlow.NetCore
 		{
 			// Credit: http://www.marcusoft.net/2010/12/specflowexe-and-mstest.html
 			var arguments = "generateall ";
+
 			// Version 2.4.0 and higher require the -p parameter
 			// Version 2.3.2 and below cannot work with the -p parameter so we can't add
 			var projectParameterVersion = Version.Parse("2.4.0");
 			var localSpecFlowVersion = Version.Parse(_specFlowVersion);
+
 			if (localSpecFlowVersion >= projectParameterVersion)
 				arguments += $@"-p ""{csproj}"" --force --verbose";
 			else

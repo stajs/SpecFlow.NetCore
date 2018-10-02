@@ -53,8 +53,8 @@ namespace SpecFlow.NetCore
 
 			Content = string.Format(Content, testFramework);
 
-			// fixes SpecFlow Scenario Outline scenarios appearing under the project they belong to.
-			// see https://github.com/stajs/SpecFlow.NetCore/issues/34 and https://github.com/techtalk/SpecFlow/issues/275
+			// Fixes SpecFlow Scenario Outline scenarios appearing under the project they belong to.
+			// See https://github.com/stajs/SpecFlow.NetCore/issues/34 and https://github.com/techtalk/SpecFlow/issues/275.
 			if (testFramework.ToLower() == "mstest")
 				Content = Content.Replace("</specFlow>", "  <generator allowDebugGeneratedFiles=\"true\" />\r\n  </specFlow>");
 
@@ -143,6 +143,5 @@ namespace SpecFlow.NetCore
 
 			return packageReferences;
 		}
-
 	}
 }

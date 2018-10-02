@@ -27,7 +27,7 @@ namespace Specflow.NetCore
 			if (args == null || !args.Any())
 				return;
 
-			// establish a dictionary of all good command line variables
+			// Establish a dictionary of all good command line variables.
 			var argDictionary = new Dictionary<string, string>
 			{
  				{ SpecFlowPathArgName, null },
