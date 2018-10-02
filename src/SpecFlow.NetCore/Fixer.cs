@@ -19,11 +19,12 @@ namespace SpecFlow.NetCore
 		private readonly string _toolsVersion;
 		private string _specFlowVersion;
 
-		public Fixer(string specFlowPath = null, string testFramework = null, string toolsVersion = "14.0")
+		public Fixer(string specFlowPath = null, string specFlowVersion = null, string testFramework = null, string toolsVersion = "14.0")
 		{
 			_specFlowExe = specFlowPath;
 			_testFramework = testFramework;
 			_toolsVersion = toolsVersion;
+			_specFlowVersion = specFlowVersion;
 		}
 
 		private static string FindSpecFlow(string version)
