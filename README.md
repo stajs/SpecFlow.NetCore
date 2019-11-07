@@ -1,3 +1,7 @@
+This repo is now archived because SpecFlow has caught up! A huge thanks to the many contributors! :beers:
+
+---
+
 :warning: **SpecFlow itself (and by extension this project) is currently limited to Windows platforms with .NET Framework v4.5.1+, or non-Windows with Mono.**
 
 # SpecFlow.NetCore
